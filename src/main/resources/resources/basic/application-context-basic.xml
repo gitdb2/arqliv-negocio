@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="basicComponent" class="com.st.component.basic.BasicComponent">
+            <property name="source" ref="plainFileDataSource" />
+	</bean>
+
+	<bean id="plainFileDataSource" class="com.st.source.PlainFileDataSource" init-method="initSource" destroy-method="destroySource">
+		<property name="fileName" value="/resources/data.txt" />
+	</bean>
+	
+	
+	 <bean id="allBeansLister" class="com.st.postprocessor.AllBeansLister"/>
+</beans>

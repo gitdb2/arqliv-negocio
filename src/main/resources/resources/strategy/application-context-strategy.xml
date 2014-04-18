@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="strategyComponent" class="com.st.component.strategy.StrategyComponent">
+
+	</bean>
+
+	<bean id="printProcessor" class="com.st.processor.PrintProcessor" />
+	
+	<bean id="talkProcessor" class="com.st.processor.talk.TalkProcessor" />
+
+</beans>

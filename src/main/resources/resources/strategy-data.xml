@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<dataList>
+	<data strategy="print">Data Xml I</data>
+	<data strategy="talk">Hello</data>
+	<data strategy="print">Data Xml III</data>
+	<data strategy="talk">how are you</data>
+	<data strategy="print">Data Xml V</data>
+	<data strategy="talk">curri</data>
+</dataList>
