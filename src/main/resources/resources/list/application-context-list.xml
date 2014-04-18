@@ -3,7 +3,7 @@
 
 <beans>
 
-	<bean id="" class="com.st.component.list.ListComponent">
+	<bean id="processors" class="com.st.component.list.ListComponent">
 	</bean>
 
 	<bean id="printProcessor01" class="com.st.processor.PrintProcessor" />
