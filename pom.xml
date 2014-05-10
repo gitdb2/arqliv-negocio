@@ -89,6 +89,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>uy.edu.ort.arqliv.obligatorio</groupId>
+			<artifactId>common-cli</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>	
 	
 	
