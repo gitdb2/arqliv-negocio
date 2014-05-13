@@ -13,7 +13,7 @@ public class LoginServiceImpl implements LoginService{
 	@Override
 	public boolean login(String user, String password) throws CustomServiceException {
 		
-		log.debug("user: "+ user + " pass: "+password );
+		log.info("user: "+ user + " pass: "+password );
 		return "1".equals(user);
 	}
 

@@ -1,12 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>uy.edu.ort.arqliv.obligatorio</groupId>
-  <artifactId>negocio</artifactId>
-  <version>0.0.1</version>
-  
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>uy.edu.ort.arqliv.obligatorio</groupId>
+	<artifactId>negocio</artifactId>
+	<version>0.0.1</version>
+
+	<properties>
 
 		<!-- Generic properties -->
 		<java.version>1.7</java.version>
@@ -15,7 +14,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
 		<!-- Spring -->
 		<spring-framework.version>4.0.3.RELEASE</spring-framework.version>
-<!-- 		<spring-framework.version>3.2.7.RELEASE</spring-framework.version> -->
+		<!-- <spring-framework.version>3.2.7.RELEASE</spring-framework.version> -->
 
 		<!-- Hibernate / JPA -->
 		<hibernate.version>4.3.5.Final</hibernate.version>
@@ -28,19 +27,19 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<junit.version>4.11</junit.version>
 
 	</properties>
-	
+
 	<dependencies>
-	
-	    <!-- tag::joda[] -->
-  
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.2</version>
-        </dependency>
-  
-    <!-- end::joda[] -->
-	
+
+		<!-- tag::joda[] -->
+
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.2</version>
+		</dependency>
+
+		<!-- end::joda[] -->
+
 		<!-- Spring and Transactions -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -74,7 +73,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<version>${hibernate.version}</version>
 		</dependency>
 
-		
+
 		<!-- Test Artifacts -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -94,17 +93,29 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<artifactId>spring-boot-starter-jetty</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
-		
+
+
+<!-- Nuestras -->
 		<dependency>
 			<groupId>uy.edu.ort.arqliv.obligatorio</groupId>
 			<artifactId>common-cli</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-	</dependencies>	
-	
+		<dependency>
+			<groupId>uy.edu.ort.arqliv.obligatorio</groupId>
+			<artifactId>persistencia</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>uy.edu.ort.arqliv.obligatorio</groupId>
+			<artifactId>dominio</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>
+
 	<build>
-        <plugins>
-        	<plugin>
+		<plugins>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
@@ -113,30 +124,30 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					<target>1.7</target>
 				</configuration>
 			</plugin>
-        
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>hello.HelloWorld</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-	
-	
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>hello.HelloWorld</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+
 </project>
