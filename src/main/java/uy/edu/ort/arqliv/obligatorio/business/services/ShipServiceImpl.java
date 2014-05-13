@@ -18,6 +18,8 @@ public class ShipServiceImpl implements ShipService {
 	@Override
 	public void store(String user, Ship ship) throws CustomServiceException {
 
+		log.info("llego el login: "+user);
+		log.info("llego el ship: "+ ship);
 		try {
 			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
 					PersistenceConstants.ShipDao);
