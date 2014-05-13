@@ -16,7 +16,7 @@ public class ShipServiceImpl implements ShipService {
 	private final Logger log = LoggerFactory.getLogger(ShipServiceImpl.class);
 
 	@Override
-	public void store(String user, Ship ship) throws CustomServiceException {
+	public long store(String user, Ship ship) throws CustomServiceException {
 
 		log.info("llego el login: "+user);
 		log.info("llego el ship: "+ ship);
@@ -24,7 +24,7 @@ public class ShipServiceImpl implements ShipService {
 			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
 					PersistenceConstants.ShipDao);
 
-			shipDAO.store(ship);
+			return shipDAO.store(ship);
 		} catch (Exception e) {
 			log.error("error al dar de alta un ship",e);
 			throw new CustomServiceException("", e);
