@@ -72,7 +72,7 @@ public class ContextSingleton {
 	}
 
 	public void init() {
-		log.info("Inicializado");
+		log.info("ContextSingleton Inicializado");
 	}
 
 	public Object getBean(String beanName) {

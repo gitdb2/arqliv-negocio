@@ -11,7 +11,11 @@ import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomServiceException;
 import uy.edu.ort.arqliv.obligatorio.dominio.Ship;
 import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IShipDAO;
-
+/**
+ * 
+ * @author rodrigo
+ *
+ */
 public class ShipServiceImpl implements ShipService {
 	private final Logger log = LoggerFactory.getLogger(ShipServiceImpl.class);
 
@@ -57,6 +61,34 @@ public class ShipServiceImpl implements ShipService {
 			throw new CustomServiceException("", e);
 		}
 		
+	}
+
+	@Override
+	public long update(String user, Ship ship) throws CustomServiceException {
+		log.info("llego el login: "+user);
+		log.info("llego el ship: "+ ship);
+		try {
+			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
+					PersistenceConstants.ShipDao);
+
+			return shipDAO.store(ship);
+		} catch (Exception e) {
+			log.error("error al modificar un ship",e);
+			throw new CustomServiceException("", e);
+		}
+	}
+
+	@Override
+	public Ship find(String user, long shipId) throws CustomServiceException {
+		try {
+			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
+					PersistenceConstants.ShipDao);
+
+			return shipDAO.findById(shipId);
+		} catch (Exception e) {
+			log.error("error al buscar un ship",e);
+			throw new CustomServiceException("", e);
+		}
 	}
 
 }
