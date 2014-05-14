@@ -61,4 +61,19 @@ public class ShipServiceImpl implements ShipService {
 		
 	}
 
+	@Override
+	public long update(String user, Ship ship) throws CustomServiceException {
+		log.info("llego el login: "+user);
+		log.info("llego el ship: "+ ship);
+		try {
+			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
+					PersistenceConstants.ShipDao);
+
+			return shipDAO.store(ship);
+		} catch (Exception e) {
+			log.error("error al modificar un ship",e);
+			throw new CustomServiceException("", e);
+		}
+	}
+
 }
