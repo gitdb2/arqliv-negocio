@@ -17,7 +17,6 @@ public class ShipServiceImpl implements ShipService {
 
 	@Override
 	public long store(String user, Ship ship) throws CustomServiceException {
-
 		log.info("llego el login: "+user);
 		log.info("llego el ship: "+ ship);
 		try {
@@ -29,7 +28,6 @@ public class ShipServiceImpl implements ShipService {
 			log.error("error al dar de alta un ship",e);
 			throw new CustomServiceException("", e);
 		}
-		
 	}
 
 	@Override

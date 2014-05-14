@@ -93,7 +93,12 @@
 			<artifactId>spring-boot-starter-jetty</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
-
+		
+		<dependency>
+    		<groupId>cglib</groupId>
+    		<artifactId>cglib</artifactId>
+    		<version>3.1</version>
+		</dependency>
 
 <!-- Nuestras -->
 		<dependency>
@@ -110,6 +115,11 @@
 			<groupId>uy.edu.ort.arqliv.obligatorio</groupId>
 			<artifactId>dominio</artifactId>
 			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+			<version>1.0.0.RELEASE</version>
 		</dependency>
 	</dependencies>
 
