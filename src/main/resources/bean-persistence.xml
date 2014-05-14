@@ -47,6 +47,4 @@
 		</property>
 	</bean>
 	
-	<bean id="beanInitProcessor" class="uy.edu.ort.arqliv.obligatorio.persistencia.init.BeanInitProcessor"></bean>
-
 </beans>

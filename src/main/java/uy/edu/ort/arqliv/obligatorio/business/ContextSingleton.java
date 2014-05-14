@@ -21,7 +21,7 @@ public class ContextSingleton {
 		Properties prop = new Properties();
 		InputStream input = null;
 		String[] beanArray = new String[] { "bean-remoting.xml",
-				"bean-persistence.xml" };
+				"bean-persistence.xml", "bean-aop.xml" };
 
 		try {
 
