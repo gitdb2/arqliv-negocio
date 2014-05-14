@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import uy.edu.ort.arqliv.obligatorio.business.ContextSingleton;
 import uy.edu.ort.arqliv.obligatorio.common.ShipService;
+import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomInUseServiceException;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomServiceException;
 import uy.edu.ort.arqliv.obligatorio.dominio.Ship;
 import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
@@ -38,14 +39,19 @@ public class ShipServiceImpl implements ShipService {
 
 	@Override
 	public void delete(String user, long shipId) throws CustomServiceException {
+		boolean ok =false;
 		try {
 			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
 					PersistenceConstants.ShipDao);
 
-			shipDAO.delete(shipId);
+			ok =  shipDAO.delete(shipId);
 		} catch (Exception e) {
 			log.error("error al dar de baja un ship",e);
 			throw new CustomServiceException("", e);
+		}
+		
+		if(!ok){
+			throw new CustomInUseServiceException("No se puede borrar pues está en unso");
 		}
 	}
 
