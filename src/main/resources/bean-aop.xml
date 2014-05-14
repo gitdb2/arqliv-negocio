@@ -11,5 +11,9 @@
           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
 	<bean id="beanInitProcessor" class="uy.edu.ort.arqliv.obligatorio.business.aop.BeanInitProcessor"></bean>
+	
+	<aop:aspectj-autoproxy /> 
+	
+	<bean id="userActivityAspect" class="uy.edu.ort.arqliv.obligatorio.business.aop.UserActivityAspect" />
 
 </beans>
