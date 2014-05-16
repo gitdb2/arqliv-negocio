@@ -32,4 +32,18 @@
 	</bean>
 <!-- Servicio para ship END-->
 
+<!-- Servicio para ship INI-->
+	<bean id="profilingService"
+		class="uy.edu.ort.arqliv.obligatorio.business.services.ProfilingServiceImpl" />
+
+	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="serviceName" value="ProfilingService" />
+		<property name="serviceInterface"
+			value="uy.edu.ort.arqliv.obligatorio.common.ProfilingService" />
+		<property name="service" ref="profilingService" />
+		<!-- default 1099 -->
+		<property name="registryPort" value="1199" />
+	</bean>
+<!-- Servicio para ship END-->
+
 </beans>
