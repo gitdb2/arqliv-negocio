@@ -7,9 +7,8 @@ import org.slf4j.LoggerFactory;
 public class MainBusiness {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	public static void main(String[] args) {
-		
-		
 		new MainBusiness().run();
 	}
 
@@ -18,8 +17,6 @@ public class MainBusiness {
 		log.info("=================================");
 		log.info("======== SERVER ONLINE ==========");
 		log.info("=================================");
-		
-		
 	}
 
 }

@@ -41,7 +41,7 @@ public class UsageAuditAspect {
 		UsageAudit usageAudit = new UsageAudit();
 		try {
 			usageAudit.setUser((String)joinPoint.getArgs()[0]);
-			usageAudit.setService(joinPoint.getTarget().getClass().getName());
+			usageAudit.setService(joinPoint.getTarget().getClass().getSimpleName());
 			usageAudit.setAction(joinPoint.getSignature().getName());
 			usageAudit.setParameters(Arrays.toString(joinPoint.getArgs()));
 		} catch (Exception e) {
