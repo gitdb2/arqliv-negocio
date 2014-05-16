@@ -6,17 +6,17 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-	<bean id="loginService"
-		class="uy.edu.ort.arqliv.obligatorio.business.services.LoginServiceImpl" />
+<!-- 	<bean id="loginService" -->
+<!-- 		class="uy.edu.ort.arqliv.obligatorio.business.services.LoginServiceImpl" /> -->
 
-	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
-		<property name="serviceName" value="LoginService" />
-		<property name="serviceInterface"
-			value="uy.edu.ort.arqliv.obligatorio.common.LoginService" />
-		<property name="service" ref="loginService" />
-		<!-- default 1099 -->
-		<property name="registryPort" value="1199" />
-	</bean>
+<!-- 	<bean class="org.springframework.remoting.rmi.RmiServiceExporter"> -->
+<!-- 		<property name="serviceName" value="LoginService" /> -->
+<!-- 		<property name="serviceInterface" -->
+<!-- 			value="uy.edu.ort.arqliv.obligatorio.common.LoginService" /> -->
+<!-- 		<property name="service" ref="loginService" /> -->
+ 		<!-- default 1099 -->
+<!-- 		<property name="registryPort" value="1199" /> -->
+<!-- 	</bean> -->
 
 <!-- Servicio para ship INI-->
 	<bean id="shipService"
@@ -31,5 +31,20 @@
 		<property name="registryPort" value="1199" />
 	</bean>
 <!-- Servicio para ship END-->
+
+<!-- Servicio para Container INI-->
+	<bean id="containerService"
+		class="uy.edu.ort.arqliv.obligatorio.business.services.ContainerServiceImpl" />
+
+	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="serviceName" value="ContainerService" />
+		<property name="serviceInterface"
+			value="uy.edu.ort.arqliv.obligatorio.common.ContainerService" />
+		<property name="service" ref="containerService" />
+		<!-- default 1099 -->
+		<property name="registryPort" value="1199" />
+	</bean>
+<!-- Servicio para container END-->
+
 
 </beans>

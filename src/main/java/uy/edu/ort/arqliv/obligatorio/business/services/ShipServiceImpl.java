@@ -95,7 +95,7 @@ public class ShipServiceImpl implements ShipService {
 		}
 		catch (Exception e) {
 			log.error("error al modificar un ship",e);
-			throw new CustomServiceException("", e);
+			throw new CustomServiceException(e.getMessage(), e);
 		}
 	}
 
@@ -108,7 +108,7 @@ public class ShipServiceImpl implements ShipService {
 			return shipDAO.findById(shipId);
 		} catch (Exception e) {
 			log.error("error al buscar un ship",e);
-			throw new CustomServiceException("", e);
+			throw new CustomServiceException(e.getMessage(), e);
 		}
 	}
 
