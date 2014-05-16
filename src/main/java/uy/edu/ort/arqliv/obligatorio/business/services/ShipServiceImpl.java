@@ -1,5 +1,6 @@
 package uy.edu.ort.arqliv.obligatorio.business.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import uy.edu.ort.arqliv.obligatorio.business.ContextSingleton;
 import uy.edu.ort.arqliv.obligatorio.common.ShipService;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomInUseServiceException;
+import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomNotArrivedThatDateServiceException;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomServiceException;
 import uy.edu.ort.arqliv.obligatorio.dominio.Ship;
 import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
@@ -45,7 +47,7 @@ public class ShipServiceImpl implements ShipService {
 			ok =  shipDAO.delete(shipId);
 		} catch (Exception e) {
 			log.error("error al dar de baja un ship",e);
-			throw new CustomServiceException("", e);
+			throw new CustomServiceException(e.getMessage(), e);
 		}
 		
 		if(!ok){
@@ -64,23 +66,36 @@ public class ShipServiceImpl implements ShipService {
 			return shipDAO.findAll();
 		} catch (Exception e) {
 			log.error("error al listar los ships",e);
-			throw new CustomServiceException("", e);
+			throw new CustomServiceException(e.getMessage(), e);
 		}
 		
 	}
 
 	@Override
-	public long update(String user, Ship ship) throws CustomServiceException {
+	public long update(String user, Ship ship, Date arrivalDate) throws CustomServiceException {
 		log.info("llego el login: "+user);
 		log.info("llego el ship: "+ ship);
+		
 		try {
 			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
 					PersistenceConstants.ShipDao);
 
+			Ship oldShip = shipDAO.findById(ship.getId());
+			if(oldShip.getCapacity() != ship.getCapacity()){
+				if(!shipDAO.canBeUpdated(ship.getId(), arrivalDate)){
+					throw new CustomNotArrivedThatDateServiceException(
+							"No se pude modificar la capacidad, pues no hay arribos para esa fecha");
+				}
+			}
+			
 			return shipDAO.store(ship);
-		} catch (Exception e) {
+		}
+		catch(CustomNotArrivedThatDateServiceException e){
+			throw e;
+		}
+		catch (Exception e) {
 			log.error("error al modificar un ship",e);
-			throw new CustomServiceException("", e);
+			throw new CustomServiceException(e.getMessage(), e);
 		}
 	}
 
@@ -93,7 +108,7 @@ public class ShipServiceImpl implements ShipService {
 			return shipDAO.findById(shipId);
 		} catch (Exception e) {
 			log.error("error al buscar un ship",e);
-			throw new CustomServiceException("", e);
+			throw new CustomServiceException(e.getMessage(), e);
 		}
 	}
 

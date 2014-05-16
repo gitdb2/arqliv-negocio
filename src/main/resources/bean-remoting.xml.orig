@@ -32,6 +32,7 @@
 	</bean>
 <!-- Servicio para ship END-->
 
+<<<<<<< HEAD
 <!-- Servicio para ship INI-->
 	<bean id="profilingService"
 		class="uy.edu.ort.arqliv.obligatorio.business.services.ProfilingServiceImpl" />
@@ -45,7 +46,7 @@
 		<property name="registryPort" value="1199" />
 	</bean>
 <!-- Servicio para ship END-->
-
+=======
 <!-- Servicio para Container INI-->
 	<bean id="containerService"
 		class="uy.edu.ort.arqliv.obligatorio.business.services.ContainerServiceImpl" />
@@ -59,5 +60,7 @@
 		<property name="registryPort" value="1199" />
 	</bean>
 <!-- Servicio para container END-->
+
+>>>>>>> af545f52bd53c17d98e73ef6a462d45203fd2726
 
 </beans>
