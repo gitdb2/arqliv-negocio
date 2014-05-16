@@ -14,6 +14,6 @@
 	
 	<aop:aspectj-autoproxy /> 
 	
-	<bean id="userActivityAspect" class="uy.edu.ort.arqliv.obligatorio.business.aop.UserActivityAspect" />
+	<bean id="usageAuditAspect" class="uy.edu.ort.arqliv.obligatorio.business.aop.UsageAuditAspect" />
 
 </beans>
