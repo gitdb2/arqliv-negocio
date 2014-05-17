@@ -60,4 +60,18 @@
 	</bean>
 <!-- Servicio para container END-->
 
+<!-- Servicio para reportes INI-->
+	<bean id="reportsService"
+		class="uy.edu.ort.arqliv.obligatorio.business.services.ReportsServiceImpl" />
+
+	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="serviceName" value="ReportsService" />
+		<property name="serviceInterface"
+			value="uy.edu.ort.arqliv.obligatorio.common.ReportsService" />
+		<property name="service" ref="reportsService" />
+		<!-- default 1099 -->
+		<property name="registryPort" value="1199" />
+	</bean>
+<!-- Servicio para reportes END-->
+
 </beans>

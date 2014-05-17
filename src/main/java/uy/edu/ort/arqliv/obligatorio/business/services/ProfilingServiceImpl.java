@@ -15,7 +15,7 @@ import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IUsageAuditDAO;
 
 public class ProfilingServiceImpl implements ProfilingService {
 
-	private final Logger log = LoggerFactory.getLogger(ProfilingService.class);
+	private final Logger log = LoggerFactory.getLogger(ProfilingServiceImpl.class);
 	
 	@Override
 	public List<Pair<String, Double>> avgServiceTime(String user, Date forDate) throws CustomServiceException {
