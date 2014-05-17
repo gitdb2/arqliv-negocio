@@ -35,8 +35,8 @@ public class ContainerServiceImpl implements ContainerService {
 
 			return containerDAO.store(container);
 		} catch (Exception e) {
-			log.error("error al dar de alta un container",e);
-			throw new CustomServiceException("", e);
+			log.error("error al dar de alta un contenedor",e);
+			throw new CustomServiceException(e.getMessage(), e);
 		}
 	}
 
@@ -49,7 +49,7 @@ public class ContainerServiceImpl implements ContainerService {
 
 			ok =  containerDAO.delete(id);
 		} catch (Exception e) {
-			log.error("error al dar de baja un container",e);
+			log.error("error al dar de baja un contenedor",e);
 			throw new CustomServiceException(e.getMessage(), e);
 		}
 		
@@ -68,7 +68,7 @@ public class ContainerServiceImpl implements ContainerService {
 			
 			return containerDAO.findAll();
 		} catch (Exception e) {
-			log.error("error al listar los ships",e);
+			log.error("error al listar los contenedores",e);
 			throw new CustomServiceException(e.getMessage(), e);
 		}
 		
@@ -91,7 +91,7 @@ public class ContainerServiceImpl implements ContainerService {
 			throw e;
 		}
 		catch (Exception e) {
-			log.error("error al modificar un container",e);
+			log.error("error al modificar un contenedor",e);
 			throw new CustomServiceException(e.getMessage(), e);
 		}
 	}
@@ -104,7 +104,7 @@ public class ContainerServiceImpl implements ContainerService {
 
 			return containerDAO.findById(id);
 		} catch (Exception e) {
-			log.error("error al buscar un container",e);
+			log.error("error al buscar un contenedor",e);
 			throw new CustomServiceException(e.getMessage(), e);
 		}
 	}
