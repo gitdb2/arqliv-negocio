@@ -18,8 +18,6 @@ public class MainBusiness {
 		log.info("=================================");
 		log.info("======= SERVER IS ONLINE ========");
 		log.info("=================================");
-		
-		
 	}
 
 }
