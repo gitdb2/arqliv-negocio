@@ -67,12 +67,12 @@ public class ArrivalServiceImpl implements ArrivalService {
 
 			try {
 				IContainerDAO containerDAO = (IContainerDAO) ContextSingleton
-						.getInstance().getBean(
-								PersistenceConstants.ContainerDao);
+						.getInstance().getBean(PersistenceConstants.ContainerDao);
+				
 				List<Container> containers = new ArrayList<Container>();
 
-				List<Long> containersInArrival = generateContainerList(arrival
-						.getContainers());
+			//	List<Long> containersInArrival = generateContainerList(arrival
+			//			.getContainers());
 
 				double sumContainerCapacity = 0.0;
 				for (Long containerId : containerList) {
@@ -126,11 +126,11 @@ public class ArrivalServiceImpl implements ArrivalService {
 				}
 
 				arrival.setShipCapacityThatDay(shipCapacity);
+				arrival.setShipTransportedWeightThatDay(sumContainerCapacity);
 				arrival.setShip(ship);
 				arrival.setContainers(containers);
 
-				IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
-						.getInstance().getBean(PersistenceConstants.ArrivalDao);
+				IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
 
 				return arrivalDAO.store(arrival);
 			} catch (CustomServiceException e) {
