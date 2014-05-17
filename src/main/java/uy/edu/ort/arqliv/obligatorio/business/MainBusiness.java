@@ -6,16 +6,17 @@ import org.slf4j.LoggerFactory;
 
 public class MainBusiness {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
+	private static final Logger log = LoggerFactory.getLogger(MainBusiness.class);
 	public static void main(String[] args) {
+		
+		log.info("============ START ==============");
 		new MainBusiness().run();
 	}
 
 	private void run() {
 		ContextSingleton.getInstance().init();
 		log.info("=================================");
-		log.info("======== SERVER ONLINE ==========");
+		log.info("======= SERVER IS ONLINE ========");
 		log.info("=================================");
 	}
 

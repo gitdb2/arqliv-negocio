@@ -74,4 +74,18 @@
 	</bean>
 <!-- Servicio para reportes END-->
 
+<!-- Servicio para Arrival INI-->
+	<bean id="arrivalService"
+		class="uy.edu.ort.arqliv.obligatorio.business.services.ArrivalServiceImpl" />
+
+	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="serviceName" value="ArrivalService" />
+		<property name="serviceInterface"
+			value="uy.edu.ort.arqliv.obligatorio.common.ArrivalService" />
+		<property name="service" ref="arrivalService" />
+		<!-- default 1099 -->
+		<property name="registryPort" value="1199" />
+	</bean>
+<!-- Servicio para Arrival END-->
+
 </beans>
