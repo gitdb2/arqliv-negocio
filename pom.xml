@@ -30,6 +30,16 @@
 
 	<dependencies>
 
+
+		<!-- commons lang -->
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<!-- commons lang -->
+
+
 		<!-- tag::joda[] -->
 
 		<dependency>
@@ -93,8 +103,8 @@
 			<artifactId>spring-boot-starter-jetty</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
-		
-<!-- Nuestras -->
+
+		<!-- Nuestras -->
 		<dependency>
 			<groupId>uy.edu.ort.arqliv.obligatorio</groupId>
 			<artifactId>common-cli</artifactId>
@@ -119,7 +129,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 			<version>${spring-framework.version}</version>
-		</dependency> 
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
