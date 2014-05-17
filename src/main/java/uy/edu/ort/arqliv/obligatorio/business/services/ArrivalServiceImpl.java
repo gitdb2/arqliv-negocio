@@ -67,12 +67,9 @@ public class ArrivalServiceImpl implements ArrivalService {
 
 			try {
 				IContainerDAO containerDAO = (IContainerDAO) ContextSingleton
-						.getInstance().getBean(
-								PersistenceConstants.ContainerDao);
+						.getInstance().getBean(PersistenceConstants.ContainerDao);
+				
 				List<Container> containers = new ArrayList<Container>();
-
-				List<Long> containersInArrival = generateContainerList(arrival
-						.getContainers());
 
 				double sumContainerCapacity = 0.0;
 				for (Long containerId : containerList) {
@@ -126,11 +123,11 @@ public class ArrivalServiceImpl implements ArrivalService {
 				}
 
 				arrival.setShipCapacityThatDay(shipCapacity);
+				arrival.setShipTransportedWeightThatDay(sumContainerCapacity);
 				arrival.setShip(ship);
 				arrival.setContainers(containers);
 
-				IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
-						.getInstance().getBean(PersistenceConstants.ArrivalDao);
+				IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
 
 				return arrivalDAO.store(arrival);
 			} catch (CustomServiceException e) {
@@ -171,7 +168,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 						+ theOperation + " de arribo");
 			}
 		
-			
 			Arrival originalArrival = arrivalDAO.findById(newArrival.getId());
 
 			List<Changes> changesList = findDifferences(newArrival, originalArrival, ship, containerList);
@@ -185,9 +181,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 				throw new CustomServiceException("No hay cambios para guardar en la DB, se cancela el Update");
 			}
 			
-			
-			List<Container> containers = new ArrayList<Container>();
-
 			double shipCapacity = ship.getCapacity();
 			if(SHIP_CHANGED){
 				newArrival.setShipCapacityThatDay(shipCapacity);
@@ -204,7 +197,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 				if(DATE_CHANGED){
 					//cabio contenedor y fecha: no importa si cambio el barco MUST check capacidad sum(cont) < cap barco
 					//AND disponibilidad contenedor en la fecha
-				
 					checAvailability(arrivalDAO, newArrival, originalArrival, 
 							newContainers, false, true);//no hay que sacar al arribo de la lista
 					
@@ -229,47 +221,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 					//nada que rompa reglas de negocio cambia
 				}
 			}
-
-			
-			
-//			double sumContainerCapacity = 0.0;
-//			for (Long containerId : containerList) {
-//				Container container = containerDAO.findById(containerId);
-//				if (container == null) {
-//					throw new CustomServiceException("el contenedor con id= "
-//							+ containerId
-//							+ " no se encuentra en la DB. Se cancela "
-//							+ theOperation + " de arribo");
-//				}
-//
-//				if (containerDAO.isContainerInUse(containerId,
-//						newArrival.getArrivalDate())) {
-//					SimpleDateFormat sdfOut = new SimpleDateFormat("dd/MM/yyyy");
-//					throw new CustomServiceException("el contenedor con id= "
-//							+ containerId + " ya arribó para la fecha ("
-//							+ sdfOut.format(newArrival.getArrivalDate()) + ")."
-//							+ " Se cancela " + theOperation + " de arribo");
-//				}
-//
-//				containers.add(container);
-//				sumContainerCapacity += container.getCapacity();
-//			}
-
-		
-
-//			if (shipCapacity < sumContainerCapacity) {
-//				throw new CustomServiceException("el barco con id= " + shipId
-//						+ ", no tiene capacidad (capa="
-//						+ String.format("%10.2f", shipCapacity) + " Kg.) "
-//						+ " para soportar "
-//						+ String.format("%10.2f", sumContainerCapacity)
-//						+ " Kg. de los contenedores." + " Se cancela "
-//						+ theOperation + " de arribo");
-//			}
-
-//			newArrival.setShipCapacityThatDay(shipCapacity);
-//			newArrival.setShip(ship);
-//			newArrival.setContainers(containers);
 
 			return arrivalDAO.store(newArrival);
 		} catch (CustomServiceException e) {
