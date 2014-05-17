@@ -220,6 +220,8 @@ public class ArrivalServiceImpl implements ArrivalService {
 				if(SHIP_CHANGED){
 					double sumContainerCapacity = sumCapacities(originalArrival.getContainers());
 					checkCapacity(shipId, shipCapacity, sumContainerCapacity);
+					
+					
 				}
 
 				if(DATE_CHANGED){				
