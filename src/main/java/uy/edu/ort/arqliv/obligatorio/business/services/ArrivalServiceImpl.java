@@ -71,6 +71,9 @@ public class ArrivalServiceImpl implements ArrivalService {
 				
 				List<Container> containers = new ArrayList<Container>();
 
+			//	List<Long> containersInArrival = generateContainerList(arrival
+			//			.getContainers());
+
 				double sumContainerCapacity = 0.0;
 				for (Long containerId : containerList) {
 					Container container = containerDAO.findById(containerId);
@@ -167,7 +170,8 @@ public class ArrivalServiceImpl implements ArrivalService {
 						+ " no se encuentra en la DB." + " Se cancela "
 						+ theOperation + " de arribo");
 			}
-		
+			boolean algoritmoIN = false;
+			
 			Arrival originalArrival = arrivalDAO.findById(newArrival.getId());
 
 			List<Changes> changesList = findDifferences(newArrival, originalArrival, ship, containerList);
@@ -177,10 +181,15 @@ public class ArrivalServiceImpl implements ArrivalService {
 			final boolean DESC_CHANGED = changesList.contains(Changes.DESC);
 			final boolean ORIG_CHANGED = changesList.contains(Changes.ORIG);
 			
+			log.info("\n-------->cambios :"+changesList);
+			
 			if(!DATE_CHANGED && !CONT_CHANGED && !SHIP_CHANGED && !DESC_CHANGED && !ORIG_CHANGED){
 				throw new CustomServiceException("No hay cambios para guardar en la DB, se cancela el Update");
 			}
 			
+			
+			List<Container> containers = new ArrayList<Container>();
+
 			double shipCapacity = ship.getCapacity();
 			if(SHIP_CHANGED){
 				newArrival.setShipCapacityThatDay(shipCapacity);
@@ -197,14 +206,15 @@ public class ArrivalServiceImpl implements ArrivalService {
 				if(DATE_CHANGED){
 					//cabio contenedor y fecha: no importa si cambio el barco MUST check capacidad sum(cont) < cap barco
 					//AND disponibilidad contenedor en la fecha
+				
 					checAvailability(arrivalDAO, newArrival, originalArrival, 
-							newContainers, false, true);//no hay que sacar al arribo de la lista
+							newContainers, false, algoritmoIN);//no hay que sacar al arribo de la lista
 					
 				}else{
 					//cabio contenedor: no importa si cambio el barco MUST check capacidad sum(cont) < cap barco 
 					//AND disponibilidad contenedor en la fecha pero sin tener en cuenta los que ya estan asignados al arribo
 					checAvailability(arrivalDAO, newArrival, originalArrival, 
-							newContainers, true, true);
+							newContainers, true, algoritmoIN);
 				}
 				newArrival.setContainers(newContainers);
 				
@@ -216,13 +226,16 @@ public class ArrivalServiceImpl implements ArrivalService {
 
 				if(DATE_CHANGED){				
 					checAvailability(arrivalDAO, newArrival, originalArrival, 
-										originalArrival.getContainers(), false, true);
+										originalArrival.getContainers(), false, algoritmoIN);
 				}else{
 					//nada que rompa reglas de negocio cambia
 				}
 			}
 
+			
+
 			return arrivalDAO.store(newArrival);
+			
 		} catch (CustomServiceException e) {
 			log.error("error " + errorWhen + " el Arribo", e);
 			throw e;
@@ -386,7 +399,7 @@ public class ArrivalServiceImpl implements ArrivalService {
 		}
 		
 		{//checkqueo ship
-			if(ship.getId() != originalArrival.getShip().getId()){
+			if(!ship.getId().equals(originalArrival.getShip().getId())){
 				ret.add(Changes.SHIP);
 			}
 		}
