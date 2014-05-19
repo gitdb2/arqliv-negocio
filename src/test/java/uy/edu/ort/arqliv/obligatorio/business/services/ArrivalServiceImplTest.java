@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -21,7 +22,7 @@ import uy.edu.ort.arqliv.obligatorio.dominio.Arrival;
 @ContextConfiguration({ "classpath:bean-persistence.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-
+@Ignore
 public class ArrivalServiceImplTest {
 	
 	@Rule

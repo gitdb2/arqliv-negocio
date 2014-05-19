@@ -26,7 +26,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>hello.HelloWorld</mainClass>
+                  <mainClass>uy.edu.ort.arqliv.obligatorio.business.MainBusiness</mainClass>
                 </transformer>
               </transformers>
             </configuration>
