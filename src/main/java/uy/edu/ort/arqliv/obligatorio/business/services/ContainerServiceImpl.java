@@ -13,17 +13,12 @@ import uy.edu.ort.arqliv.obligatorio.dominio.Container;
 import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IContainerDAO;
 /**
- * 
+ * Implementacion del servicio para contenedores
  * @author rodrigo
  *
  */
 public class ContainerServiceImpl implements ContainerService {
 	private final Logger log = LoggerFactory.getLogger(ContainerServiceImpl.class);
-	
-	
-
-
-	
 	
 	@Override
 	public long store(String user, Container container) throws CustomServiceException {

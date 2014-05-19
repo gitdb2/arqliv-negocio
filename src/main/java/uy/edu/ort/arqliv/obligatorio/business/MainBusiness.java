@@ -3,7 +3,11 @@ package uy.edu.ort.arqliv.obligatorio.business;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * Main principal sel servidor
+ * @author rodrigo
+ *
+ */
 public class MainBusiness {
 
 	private static final Logger log = LoggerFactory.getLogger(MainBusiness.class);

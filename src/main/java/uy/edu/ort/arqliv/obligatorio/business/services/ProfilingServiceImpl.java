@@ -13,6 +13,11 @@ import uy.edu.ort.arqliv.obligatorio.dominio.Pair;
 import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IUsageAuditDAO;
 
+/**
+ * Implementacion del servicio de profiling
+ * @author mauricio
+ *
+ */
 public class ProfilingServiceImpl implements ProfilingService {
 
 	private final Logger log = LoggerFactory.getLogger(ProfilingServiceImpl.class);

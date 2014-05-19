@@ -13,7 +13,11 @@ import uy.edu.ort.arqliv.obligatorio.dominio.Arrival;
 import uy.edu.ort.arqliv.obligatorio.dominio.Container;
 import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IArrivalDAO;
-
+/**
+ * Implementa el servicio de reportes
+ * @author mauricio
+ *
+ */
 public class ReportsServiceImpl implements ReportsService {
 
 	private final Logger log = LoggerFactory.getLogger(ReportsServiceImpl.class);

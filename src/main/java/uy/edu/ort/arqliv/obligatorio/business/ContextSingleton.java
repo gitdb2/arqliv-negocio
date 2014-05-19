@@ -9,6 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+/**
+ * Singleton encargado de levantar el contexto spring.
+ * Lee de archivo config.properties que xml levantar y 
+ * si no se encuentra utiliza valores por defecto
+ * @author rodrigo
+ *
+ */
 public class ContextSingleton {
 
 	private final Logger log = LoggerFactory.getLogger(ContextSingleton.class);
@@ -71,10 +78,18 @@ public class ContextSingleton {
 		return instance;
 	}
 
+	/**
+	 * Metod dummy que se utiliza apra dar la idea de inicializacion y ser ejecutado por el main principal al inicio de la aplicacion.
+	 */
 	public void init() {
 		log.info("ContextSingleton Inicializado");
 	}
 
+	/**
+	 * Metodo para obtener desde el contexto String el bean con nombre beanName
+	 * @param beanName
+	 * @return
+	 */
 	public Object getBean(String beanName) {
 		return ctx.getBean(beanName);
 	}

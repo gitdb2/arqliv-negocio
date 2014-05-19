@@ -15,7 +15,7 @@ import uy.edu.ort.arqliv.obligatorio.dominio.Ship;
 import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IShipDAO;
 /**
- * 
+ * Impementa el servicio para los barcos
  * @author rodrigo
  *
  */

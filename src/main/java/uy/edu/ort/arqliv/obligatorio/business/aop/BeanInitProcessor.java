@@ -5,6 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
+/**
+ * Bean para ser attacheado al ciclo de vida de spring y loguear los beans cuando spring levanta
+ * @author mauricio
+ *
+ */
 public class BeanInitProcessor implements BeanPostProcessor {
 	
 	private final Logger log = LoggerFactory.getLogger(BeanInitProcessor.class);

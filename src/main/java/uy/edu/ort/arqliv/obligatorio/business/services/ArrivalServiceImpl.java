@@ -24,7 +24,7 @@ import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IContainerDAO;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IShipDAO;
 
 /**
- * 
+ * Implementacion del servicio de arribos
  * @author rodrigo
  * 
  */
@@ -145,6 +145,16 @@ public class ArrivalServiceImpl implements ArrivalService {
 		}
 	}
 
+	/**
+	 * Metodo para modificacion de un arrival, su implementacion tiene contreoles que 
+	 * no permiten que sea el mismo que para el alta.
+	 * Refuerza las 3 reglas de negocios que son requerimiento
+	 * @param newArrival
+	 * @param shipId
+	 * @param containerList
+	 * @return
+	 * @throws CustomServiceException
+	 */
 	private long internalUpdate(Arrival newArrival, Long shipId,
 			List<Long> containerList) throws CustomServiceException {
 
@@ -245,7 +255,13 @@ public class ArrivalServiceImpl implements ArrivalService {
 		}
 	}
 	
-	
+	/**
+	 * Cheuqeo de capacidad entre barco y contenedores
+	 * @param shipId
+	 * @param shipCapacity
+	 * @param sumContainerCapacity
+	 * @throws CustomServiceException
+	 */
 	private void checkCapacity(Long shipId, double shipCapacity, double sumContainerCapacity) throws CustomServiceException{
 		if (shipCapacity < sumContainerCapacity) {
 		throw new CustomServiceException("el barco con id= " + shipId
@@ -353,7 +369,8 @@ public class ArrivalServiceImpl implements ArrivalService {
 	}
 
 	/**
-	 * 
+	 * Examina los parametros y busca que cambios hay en la actualizacion.
+	 * y retorna una lista de enumerado Changes
 	 * @param newArrival
 	 * @param originalArrival
 	 * @param ship
@@ -480,6 +497,11 @@ public class ArrivalServiceImpl implements ArrivalService {
 		DATE, CONT, SHIP, DESC, ORIG
 	}
 
+	/**
+	 * transforma una lista de contenedores en una lista de sus ids
+	 * @param containers
+	 * @return
+	 */
 	private List<Long> generateContainerList(List<Container> containers) {
 		List<Long> ret = new ArrayList<>();
 		if (containers != null) {
