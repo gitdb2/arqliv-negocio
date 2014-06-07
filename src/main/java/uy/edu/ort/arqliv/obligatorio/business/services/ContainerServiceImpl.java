@@ -39,15 +39,12 @@ public class ContainerServiceImpl implements ContainerService {
 	public void delete(String user, long id) throws CustomServiceException {
 		boolean ok =false;
 		try {
-			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
-					PersistenceConstants.ContainerDao);
-
+			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ContainerDao);
 			ok =  containerDAO.delete(id);
 		} catch (Exception e) {
 			log.error("error al dar de baja un contenedor",e);
 			throw new CustomServiceException(e.getMessage(), e);
 		}
-		
 		if(!ok){
 			throw new CustomInUseServiceException("No se puede borrar pues está en unso");
 		}

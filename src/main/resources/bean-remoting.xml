@@ -74,7 +74,7 @@
 	</bean>
 <!-- Servicio para Arrival END-->
 
-<!-- Servicio para Arrival INI-->
+<!-- Servicio para Reportes INI-->
 	<bean id="reportsService" class="uy.edu.ort.arqliv.obligatorio.business.services.ReportsServiceImpl" />
 
 	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
@@ -85,6 +85,19 @@
 		<!-- default 1099 -->
 		<property name="registryPort" value="1199" />
 	</bean>
-<!-- Servicio para Arrival END-->
+<!-- Servicio para Reportes END-->
+
+<!-- Servicio para Departure INI-->
+	<bean id="departureService" class="uy.edu.ort.arqliv.obligatorio.business.services.DepartureServiceImpl" />
+
+	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="serviceName" value="DepartureService" />
+		<property name="serviceInterface"
+			value="uy.edu.ort.arqliv.obligatorio.common.DepartureService" />
+		<property name="service" ref="departureService" />
+		<!-- default 1099 -->
+		<property name="registryPort" value="1199" />
+	</bean>
+<!-- Servicio para Departure END-->
 
 </beans>

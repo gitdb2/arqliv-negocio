@@ -29,16 +29,14 @@ import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IShipDAO;
  * 
  */
 public class ArrivalServiceImpl implements ArrivalService {
-	private final Logger log = LoggerFactory
-			.getLogger(ArrivalServiceImpl.class);
+	
+	private final Logger log = LoggerFactory.getLogger(ArrivalServiceImpl.class);
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public synchronized long store(String user, Arrival arrival, Long shipId,
 			List<Long> containerList) throws CustomServiceException {
-		log.info("llego el login: " + user);
-		return internalCreateUpdate(arrival, shipId, containerList,
-				Operation.CREATE);
+		return internalCreateUpdate(arrival, shipId, containerList, Operation.CREATE);
 	}
 
 	/**
@@ -70,9 +68,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 						.getInstance().getBean(PersistenceConstants.ContainerDao);
 				
 				List<Container> containers = new ArrayList<Container>();
-
-			//	List<Long> containersInArrival = generateContainerList(arrival
-			//			.getContainers());
 
 				double sumContainerCapacity = 0.0;
 				for (Long containerId : containerList) {
@@ -197,9 +192,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 				throw new CustomServiceException("No hay cambios para guardar en la DB, se cancela el Update");
 			}
 			
-			
-			List<Container> containers = new ArrayList<Container>();
-
 			double shipCapacity = ship.getCapacity();
 			if(SHIP_CHANGED){
 				newArrival.setShipCapacityThatDay(shipCapacity);
@@ -437,10 +429,8 @@ public class ArrivalServiceImpl implements ArrivalService {
 			log.error("error al dar de baja un Arribo", e);
 			throw new CustomServiceException(e.getMessage(), e);
 		}
-
 		if (!ok) {
-			throw new CustomInUseServiceException(
-					"No se puede borrar pues está en uso");
+			throw new CustomInUseServiceException("No se puede borrar pues está en uso");
 		}
 	}
 
