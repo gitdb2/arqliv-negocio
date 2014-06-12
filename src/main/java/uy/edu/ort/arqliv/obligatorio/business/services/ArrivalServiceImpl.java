@@ -175,6 +175,7 @@ public class ArrivalServiceImpl implements ArrivalService {
 						+ " no se encuentra en la DB." + " Se cancela "
 						+ theOperation + " de arribo");
 			}
+			
 			boolean algoritmoIN = false;
 			
 			Arrival originalArrival = arrivalDAO.findById(newArrival.getId());
@@ -484,7 +485,7 @@ public class ArrivalServiceImpl implements ArrivalService {
 	}
 
 	enum Changes {
-		DATE, CONT, SHIP, DESC, ORIG
+		DATE, CONT, SHIP, DESC, ORIG, DEST
 	}
 
 	/**
