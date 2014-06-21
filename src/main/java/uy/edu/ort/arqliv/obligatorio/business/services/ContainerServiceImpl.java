@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import uy.edu.ort.arqliv.obligatorio.business.ContextSingleton;
 import uy.edu.ort.arqliv.obligatorio.common.ContainerService;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomInUseServiceException;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomServiceException;

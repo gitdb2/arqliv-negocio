@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import uy.edu.ort.arqliv.obligatorio.business.ContextSingleton;
 import uy.edu.ort.arqliv.obligatorio.common.ArrivalService;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomInUseServiceException;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomServiceException;

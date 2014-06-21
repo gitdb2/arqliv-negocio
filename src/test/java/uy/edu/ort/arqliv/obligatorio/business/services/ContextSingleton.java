@@ -1,4 +1,4 @@
-package uy.edu.ort.arqliv.obligatorio.business;
+package uy.edu.ort.arqliv.obligatorio.business.services;
 
 import java.io.IOException;
 import java.io.InputStream;
