@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import uy.edu.ort.arqliv.obligatorio.business.ContextSingleton;
 import uy.edu.ort.arqliv.obligatorio.common.ContainerService;
@@ -20,13 +21,17 @@ import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IContainerDAO;
 public class ContainerServiceImpl implements ContainerService {
 	private final Logger log = LoggerFactory.getLogger(ContainerServiceImpl.class);
 	
+	
+	@Autowired
+	IContainerDAO containerDAO;
+	
 	@Override
 	public long store(String user, Container container) throws CustomServiceException {
 		log.info("llego el login: "+user);
 		log.info("llego el container: "+ container);
 		try {
-			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
-					PersistenceConstants.ContainerDao);
+//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
+//					PersistenceConstants.ContainerDao);
 
 			return containerDAO.store(container);
 		} catch (Exception e) {
@@ -39,7 +44,7 @@ public class ContainerServiceImpl implements ContainerService {
 	public void delete(String user, long id) throws CustomServiceException {
 		boolean ok =false;
 		try {
-			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ContainerDao);
+//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ContainerDao);
 			ok =  containerDAO.delete(id);
 		} catch (Exception e) {
 			log.error("error al dar de baja un contenedor",e);
@@ -55,8 +60,8 @@ public class ContainerServiceImpl implements ContainerService {
 	@Override
 	public List<Container> list(String user) throws CustomServiceException {
 		try {
-			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
-					PersistenceConstants.ContainerDao);
+//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
+//					PersistenceConstants.ContainerDao);
 			
 			return containerDAO.findAll();
 		} catch (Exception e) {
@@ -72,8 +77,8 @@ public class ContainerServiceImpl implements ContainerService {
 		log.info("llego el container: "+ container);
 		
 		try {
-			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
-					PersistenceConstants.ContainerDao);
+//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
+//					PersistenceConstants.ContainerDao);
 			Long ret = containerDAO.update(container);
 			if(ret == null){
 				throw new CustomServiceException("no se permite modificar la capacidad de un contenedor en uso");
@@ -91,8 +96,8 @@ public class ContainerServiceImpl implements ContainerService {
 	@Override
 	public Container find(String user, long id) throws CustomServiceException {
 		try {
-			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
-					PersistenceConstants.ContainerDao);
+//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
+//					PersistenceConstants.ContainerDao);
 
 			return containerDAO.findById(id);
 		} catch (Exception e) {

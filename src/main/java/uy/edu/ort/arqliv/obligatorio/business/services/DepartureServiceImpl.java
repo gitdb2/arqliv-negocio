@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import uy.edu.ort.arqliv.obligatorio.business.ContextSingleton;
 import uy.edu.ort.arqliv.obligatorio.business.services.ArrivalServiceImpl.Changes;
@@ -28,6 +29,15 @@ public class DepartureServiceImpl implements DepartureService {
 	private final Logger log = LoggerFactory.getLogger(DepartureServiceImpl.class);
 	
 	private SimpleDateFormat sdfOut = new SimpleDateFormat("dd/MM/yyyy");
+	@Autowired
+	IDepartureDAO departureDAO ;
+	@Autowired
+	IContainerDAO containerDAO ;
+	@Autowired
+	IShipDAO shipDAO ;
+	@Autowired
+	IArrivalDAO arrivalDAO;
+	
 	
 	@Override
 	public long store(String user, Departure departure, Long shipId, List<Long> containerList) throws CustomServiceException {
@@ -36,11 +46,11 @@ public class DepartureServiceImpl implements DepartureService {
 	
 	private synchronized long internalCreate(Departure departure, Long shipId, List<Long> containerList) throws CustomServiceException { 
 		try {
-			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
-			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ContainerDao);
-			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ShipDao);
-			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
-			
+//			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
+//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ContainerDao);
+//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ShipDao);
+//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
+//			
 			List<Container> containers = new ArrayList<Container>();
 
 			for (Long containerId : containerList) {
@@ -94,10 +104,10 @@ public class DepartureServiceImpl implements DepartureService {
 
 	private synchronized long internalUpdate(Departure newDeparture, Long shipId, List<Long> containerList) throws CustomServiceException {
 		try {
-			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
-			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ContainerDao);
-			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ShipDao);
-			
+//			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
+//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ContainerDao);
+//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ShipDao);
+//			
 			Ship newShip = shipDAO.findById(shipId);
 			if (newShip == null) {
 				throw new CustomServiceException("El barco con id= " + shipId
@@ -153,7 +163,7 @@ public class DepartureServiceImpl implements DepartureService {
 	}
 	
 	private void checkPreviousArrival(Departure newDeparture) throws CustomServiceException {
-		IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
+//		IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
 		List<Arrival> previousArrivals = arrivalDAO
 				.findArrivalByShipByDateByPort(newDeparture.getShip().getId(),
 						newDeparture.getDepartureDate(),
@@ -271,7 +281,7 @@ public class DepartureServiceImpl implements DepartureService {
 	public void delete(String user, long id) throws CustomServiceException {
 		boolean ok = false;
 		try {
-			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
+//			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.k().getBean(PersistenceConstants.DepartureDao);
 			ok = departureDAO.delete(id);
 		} catch (Exception e) {
 			log.error("Error al dar de baja una Partida", e);
@@ -286,7 +296,7 @@ public class DepartureServiceImpl implements DepartureService {
 	@Override
 	public List<Departure> list(String user) throws CustomServiceException {
 		try {
-			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
+//			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
 			List<Departure> ret = new ArrayList<Departure>(departureDAO.findAll());
 			for (Departure departure : ret) {
 				departure.setContainers(new ArrayList<Container>(departure.getContainers()));
@@ -301,7 +311,7 @@ public class DepartureServiceImpl implements DepartureService {
 	@Override
 	public Departure find(String user, long id) throws CustomServiceException {
 		try {
-			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
+//			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
 			Departure ret = departureDAO.findById(id);
 			if (ret != null) {
 				ret.setContainers(new ArrayList<Container>(ret.getContainers()));

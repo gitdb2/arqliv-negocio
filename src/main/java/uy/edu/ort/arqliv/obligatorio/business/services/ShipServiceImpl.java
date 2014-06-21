@@ -5,30 +5,34 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import uy.edu.ort.arqliv.obligatorio.business.ContextSingleton;
 import uy.edu.ort.arqliv.obligatorio.common.ShipService;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomInUseServiceException;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomNotArrivedThatDateServiceException;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomServiceException;
 import uy.edu.ort.arqliv.obligatorio.dominio.Ship;
-import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IShipDAO;
 /**
  * Impementa el servicio para los barcos
  * @author rodrigo
  *
  */
+@Service("shipService")
 public class ShipServiceImpl implements ShipService {
 	private final Logger log = LoggerFactory.getLogger(ShipServiceImpl.class);
 
+	@Autowired
+	IShipDAO shipDAO;
+	
 	@Override
 	public long store(String user, Ship ship) throws CustomServiceException {
 		log.info("llego el login: "+user);
 		log.info("llego el ship: "+ ship);
 		try {
-			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
-					PersistenceConstants.ShipDao);
+//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
+//					PersistenceConstants.ShipDao);
 
 			return shipDAO.store(ship);
 		} catch (Exception e) {
@@ -41,8 +45,8 @@ public class ShipServiceImpl implements ShipService {
 	public void delete(String user, long shipId) throws CustomServiceException {
 		boolean ok =false;
 		try {
-			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
-					PersistenceConstants.ShipDao);
+//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
+//					PersistenceConstants.ShipDao);
 
 			ok =  shipDAO.delete(shipId);
 		} catch (Exception e) {
@@ -60,8 +64,8 @@ public class ShipServiceImpl implements ShipService {
 	@Override
 	public List<Ship> list(String user) throws CustomServiceException {
 		try {
-			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
-					PersistenceConstants.ShipDao);
+//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
+//					PersistenceConstants.ShipDao);
 
 			return shipDAO.findAll();
 		} catch (Exception e) {
@@ -77,8 +81,8 @@ public class ShipServiceImpl implements ShipService {
 		log.info("llego el ship: "+ ship);
 		
 		try {
-			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
-					PersistenceConstants.ShipDao);
+//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
+//					PersistenceConstants.ShipDao);
 
 			Ship oldShip = shipDAO.findById(ship.getId());
 			if(oldShip.getCapacity() != ship.getCapacity()){
@@ -102,8 +106,8 @@ public class ShipServiceImpl implements ShipService {
 	@Override
 	public Ship find(String user, long shipId) throws CustomServiceException {
 		try {
-			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
-					PersistenceConstants.ShipDao);
+//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(
+//					PersistenceConstants.ShipDao);
 
 			return shipDAO.findById(shipId);
 		} catch (Exception e) {

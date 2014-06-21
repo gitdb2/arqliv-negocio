@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,18 @@ public class ArrivalServiceImpl implements ArrivalService {
 	
 	private final Logger log = LoggerFactory.getLogger(ArrivalServiceImpl.class);
 
+	@Autowired
+	IContainerDAO containerDAO;
+	@Autowired
+	IShipDAO shipDAO;
+	@Autowired
+	IArrivalDAO arrivalDAO;
+	
+//	= (IContainerDAO) ContextSingleton
+//			.getInstance().getBean(PersistenceConstants.ContainerDao);
+//	
+	
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public synchronized long store(String user, Arrival arrival, Long shipId,
@@ -64,8 +77,9 @@ public class ArrivalServiceImpl implements ArrivalService {
 					: "al modificar");
 
 			try {
-				IContainerDAO containerDAO = (IContainerDAO) ContextSingleton
-						.getInstance().getBean(PersistenceConstants.ContainerDao);
+			
+//				IArrivalDAO arrivalDAO = (IContainerDAO) ContextSingleton
+//						.getInstance().getBean(PersistenceConstants.ContainerDao);
 				
 				List<Container> containers = new ArrayList<Container>();
 
@@ -162,12 +176,14 @@ public class ArrivalServiceImpl implements ArrivalService {
 
 		try {
 
-			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance()
-					.getBean(PersistenceConstants.ShipDao);
-			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
-					.getInstance().getBean(PersistenceConstants.ArrivalDao);
-			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton
-					.getInstance().getBean(PersistenceConstants.ContainerDao);
+			
+			
+//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance()
+//					.getBean(PersistenceConstants.ShipDao);
+//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
+//					.getInstance().getBean(PersistenceConstants.ArrivalDao);
+//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton
+//					.getInstance().getBean(PersistenceConstants.ContainerDao);
 
 			Ship ship = shipDAO.findById(shipId);
 			if (ship == null) {
@@ -422,8 +438,8 @@ public class ArrivalServiceImpl implements ArrivalService {
 	public void delete(String user, long id) throws CustomServiceException {
 		boolean ok = false;
 		try {
-			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
-					.getInstance().getBean(PersistenceConstants.ArrivalDao);
+//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
+//					.getInstance().getBean(PersistenceConstants.ArrivalDao);
 
 			ok = arrivalDAO.delete(id);
 		} catch (Exception e) {
@@ -438,8 +454,8 @@ public class ArrivalServiceImpl implements ArrivalService {
 	@Override
 	public List<Arrival> list(String user) throws CustomServiceException {
 		try {
-			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
-					.getInstance().getBean(PersistenceConstants.ArrivalDao);
+//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
+//					.getInstance().getBean(PersistenceConstants.ArrivalDao);
 			List<Arrival> ret = new ArrayList<Arrival>(arrivalDAO.findAll());
 
 			for (Arrival arrival : ret) {
@@ -466,8 +482,8 @@ public class ArrivalServiceImpl implements ArrivalService {
 	@Override
 	public Arrival find(String user, long id) throws CustomServiceException {
 		try {
-			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
-					.getInstance().getBean(PersistenceConstants.ArrivalDao);
+//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
+//					.getInstance().getBean(PersistenceConstants.ArrivalDao);
 
 			Arrival ret = arrivalDAO.findById(id);
 			if (ret != null) {
