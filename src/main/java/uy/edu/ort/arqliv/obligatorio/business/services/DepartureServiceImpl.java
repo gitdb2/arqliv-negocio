@@ -8,8 +8,8 @@ import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import uy.edu.ort.arqliv.obligatorio.business.ContextSingleton;
 import uy.edu.ort.arqliv.obligatorio.business.services.ArrivalServiceImpl.Changes;
 import uy.edu.ort.arqliv.obligatorio.common.DepartureService;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomInUseServiceException;
@@ -18,12 +18,16 @@ import uy.edu.ort.arqliv.obligatorio.dominio.Arrival;
 import uy.edu.ort.arqliv.obligatorio.dominio.Container;
 import uy.edu.ort.arqliv.obligatorio.dominio.Departure;
 import uy.edu.ort.arqliv.obligatorio.dominio.Ship;
-import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IArrivalDAO;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IContainerDAO;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IDepartureDAO;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IShipDAO;
-
+/**
+ * 
+ * @author mauricio
+ *
+ */
+@Service("departureService")
 public class DepartureServiceImpl implements DepartureService {
 
 	private final Logger log = LoggerFactory.getLogger(DepartureServiceImpl.class);

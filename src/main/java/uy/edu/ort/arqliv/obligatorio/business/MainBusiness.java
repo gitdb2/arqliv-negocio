@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
  * @author rodrigo
  *
  */
+@Deprecated
 public class MainBusiness {
 
 	private static final Logger log = LoggerFactory.getLogger(MainBusiness.class);

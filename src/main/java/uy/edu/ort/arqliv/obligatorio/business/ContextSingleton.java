@@ -16,6 +16,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author rodrigo
  *
  */
+@Deprecated
 public class ContextSingleton {
 
 	private final Logger log = LoggerFactory.getLogger(ContextSingleton.class);

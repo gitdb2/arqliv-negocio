@@ -8,10 +8,9 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import uy.edu.ort.arqliv.obligatorio.business.ContextSingleton;
 import uy.edu.ort.arqliv.obligatorio.dominio.UsageAudit;
-import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IUsageAuditDAO;
 
 /**
@@ -24,6 +23,9 @@ import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IUsageAuditDAO;
 public class UsageAuditAspect {
 
 	private final Logger log = LoggerFactory.getLogger(UsageAuditAspect.class);
+	
+	@Autowired
+	IUsageAuditDAO usageAuditDAO;
 	
 	/**
 	 * Metodo ejecutado parra loguear acciones del usuario
@@ -38,7 +40,7 @@ public class UsageAuditAspect {
 			usageAudit.setActionStartTime(new Date());
 			Object result = joinPoint.proceed();
 			usageAudit.setActionEndTime(new Date());
-			IUsageAuditDAO usageAuditDAO = (IUsageAuditDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.UsageAuditDao);
+//			IUsageAuditDAO usageAuditDAO = (IUsageAuditDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.UsageAuditDao);
 			usageAuditDAO.store(usageAudit);
 			return result; 
 		} catch (IllegalArgumentException e) { 

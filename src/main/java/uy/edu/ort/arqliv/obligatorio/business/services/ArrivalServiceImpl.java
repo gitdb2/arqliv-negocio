@@ -8,6 +8,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IShipDAO;
  * @author rodrigo
  * 
  */
+@Service("arrivalService")
 public class ArrivalServiceImpl implements ArrivalService {
 	
 	private final Logger log = LoggerFactory.getLogger(ArrivalServiceImpl.class);
@@ -112,8 +114,8 @@ public class ArrivalServiceImpl implements ArrivalService {
 					sumContainerCapacity += container.getCapacity();
 				}
 
-				IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance()
-						.getBean(PersistenceConstants.ShipDao);
+//				IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance()
+//						.getBean(PersistenceConstants.ShipDao);
 
 				Ship ship = shipDAO.findById(shipId);
 				if (ship == null) {
