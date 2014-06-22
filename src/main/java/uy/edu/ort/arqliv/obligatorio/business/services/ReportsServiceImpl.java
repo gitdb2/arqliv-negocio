@@ -31,7 +31,6 @@ public class ReportsServiceImpl implements ReportsService {
 	@Override
 	public List<Arrival> arrivalsByMonth(String user, int month) throws CustomServiceException {
 		try {
-//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
 			List<Arrival> ret = arrivalDAO.arrivalsByMonth(month);
 			for (Arrival arrival : ret) {
 				arrival.setContainers(new ArrayList<Container>(arrival.getContainers()));
@@ -46,7 +45,6 @@ public class ReportsServiceImpl implements ReportsService {
 	@Override
 	public List<Arrival> arrivalsByMonthByShip(String user, int month, Long shipId) throws CustomServiceException {
 		try {
-//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
 			List<Arrival> ret = arrivalDAO.arrivalsByMonthByShip(month, shipId);
 			for (Arrival arrival : ret) {
 				arrival.setContainers(new ArrayList<Container>(arrival.getContainers()));
