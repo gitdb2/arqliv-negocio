@@ -37,10 +37,11 @@ public class UsageAuditAspect {
 	public Object logUserAction(ProceedingJoinPoint joinPoint) throws Throwable {
 		UsageAudit usageAudit = initializeUsageAudit(joinPoint);
 		try {
-			usageAudit.setActionStartTime(new Date());
+			long ini = System.nanoTime();
+			usageAudit.setActionDate(new Date());
+			
 			Object result = joinPoint.proceed();
-			usageAudit.setActionEndTime(new Date());
-//			IUsageAuditDAO usageAuditDAO = (IUsageAuditDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.UsageAuditDao);
+			usageAudit.setActionNanoSeconds(System.nanoTime()-ini);
 			usageAuditDAO.store(usageAudit);
 			return result; 
 		} catch (IllegalArgumentException e) { 

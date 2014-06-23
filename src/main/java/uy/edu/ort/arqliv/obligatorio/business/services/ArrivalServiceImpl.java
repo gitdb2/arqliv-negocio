@@ -41,10 +41,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 	@Autowired
 	IArrivalDAO arrivalDAO;
 	
-//	= (IContainerDAO) ContextSingleton
-//			.getInstance().getBean(PersistenceConstants.ContainerDao);
-//	
-	
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -79,9 +75,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 
 			try {
 			
-//				IArrivalDAO arrivalDAO = (IContainerDAO) ContextSingleton
-//						.getInstance().getBean(PersistenceConstants.ContainerDao);
-				
 				List<Container> containers = new ArrayList<Container>();
 
 				double sumContainerCapacity = 0.0;
@@ -113,9 +106,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 					sumContainerCapacity += container.getCapacity();
 				}
 
-//				IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance()
-//						.getBean(PersistenceConstants.ShipDao);
-
 				Ship ship = shipDAO.findById(shipId);
 				if (ship == null) {
 					throw new CustomServiceException("el barco con id= "
@@ -139,9 +129,7 @@ public class ArrivalServiceImpl implements ArrivalService {
 				arrival.setShipTransportedWeightThatDay(sumContainerCapacity);
 				arrival.setShip(ship);
 				arrival.setContainers(containers);
-
-//				IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
-
+ 
 				return arrivalDAO.store(arrival);
 			} catch (CustomServiceException e) {
 				log.error("error " + errorWhen + " el Arribo", e);
@@ -176,15 +164,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 		final String errorWhen = "al modificar";
 
 		try {
-
-			
-			
-//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance()
-//					.getBean(PersistenceConstants.ShipDao);
-//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
-//					.getInstance().getBean(PersistenceConstants.ArrivalDao);
-//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton
-//					.getInstance().getBean(PersistenceConstants.ContainerDao);
 
 			Ship ship = shipDAO.findById(shipId);
 			if (ship == null) {
@@ -439,9 +418,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 	public void delete(String user, long id) throws CustomServiceException {
 		boolean ok = false;
 		try {
-//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
-//					.getInstance().getBean(PersistenceConstants.ArrivalDao);
-
 			ok = arrivalDAO.delete(id);
 		} catch (Exception e) {
 			log.error("error al dar de baja un Arribo", e);
@@ -455,8 +431,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 	@Override
 	public List<Arrival> list(String user) throws CustomServiceException {
 		try {
-//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
-//					.getInstance().getBean(PersistenceConstants.ArrivalDao);
 			List<Arrival> ret = new ArrayList<Arrival>(arrivalDAO.findAll());
 
 			for (Arrival arrival : ret) {
@@ -483,8 +457,6 @@ public class ArrivalServiceImpl implements ArrivalService {
 	@Override
 	public Arrival find(String user, long id) throws CustomServiceException {
 		try {
-//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton
-//					.getInstance().getBean(PersistenceConstants.ArrivalDao);
 
 			Arrival ret = arrivalDAO.findById(id);
 			if (ret != null) {
