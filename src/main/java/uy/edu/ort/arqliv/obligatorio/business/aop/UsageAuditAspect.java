@@ -37,8 +37,8 @@ public class UsageAuditAspect {
 	public Object logUserAction(ProceedingJoinPoint joinPoint) throws Throwable {
 		UsageAudit usageAudit = initializeUsageAudit(joinPoint);
 		try {
-			usageAudit.setActionDate(new Date());
 			long startTime = System.nanoTime();
+			usageAudit.setActionDate(new Date());
 			Object result = joinPoint.proceed();
 			long endTime = System.nanoTime();
 			usageAudit.setActionNanoSeconds(endTime - startTime);
