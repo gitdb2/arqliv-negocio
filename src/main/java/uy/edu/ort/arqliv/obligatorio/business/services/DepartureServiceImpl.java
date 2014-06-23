@@ -85,7 +85,7 @@ public class DepartureServiceImpl implements DepartureService {
 							+ containerId + " no se encuentra en la DB. Se cancela el alta de partida");
 				}
 
-				if (containerDAO.isContainerInUse(containerId, departure.getDepartureDate())) {
+				if (containerDAO.isContainerInUseForArrival(containerId, departure.getDepartureDate())) {
 					throw new CustomServiceException("el contenedor con id= "
 							+ containerId
 							+ " ya partió para la fecha ("+ sdfOut.format(departure.getDepartureDate()) + ")."

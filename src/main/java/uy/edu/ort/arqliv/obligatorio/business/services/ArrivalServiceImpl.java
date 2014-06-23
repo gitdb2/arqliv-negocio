@@ -88,7 +88,7 @@ public class ArrivalServiceImpl implements ArrivalService {
 										+ theOperation + " de arribo");
 					}
 
-					if (containerDAO.isContainerInUse(containerId,
+					if (containerDAO.isContainerInUseForArrival(containerId,
 							arrival.getArrivalDate())) {
 						SimpleDateFormat sdfOut = new SimpleDateFormat(
 								"dd/MM/yyyy");
@@ -196,7 +196,7 @@ public class ArrivalServiceImpl implements ArrivalService {
 			}
 			
 			if(CONT_CHANGED){
-				Duple<Double, List<Container>> newContainersDuple = getCpacityAndContainers(containerDAO, containerList);
+				Duple<Double, List<Container>> newContainersDuple = getCapacityAndContainers(containerDAO, containerList);
 				double sumContainerCapacity = newContainersDuple.getFirst();
 				List<Container> newContainers = newContainersDuple.getSecond();
 				
@@ -206,13 +206,13 @@ public class ArrivalServiceImpl implements ArrivalService {
 					//cabio contenedor y fecha: no importa si cambio el barco MUST check capacidad sum(cont) < cap barco
 					//AND disponibilidad contenedor en la fecha
 				
-					checAvailability(arrivalDAO, newArrival, originalArrival, 
+					checkAvailability(arrivalDAO, newArrival, originalArrival, 
 							newContainers, false, algoritmoIN);//no hay que sacar al arribo de la lista
 					
 				}else{
 					//cabio contenedor: no importa si cambio el barco MUST check capacidad sum(cont) < cap barco 
 					//AND disponibilidad contenedor en la fecha pero sin tener en cuenta los que ya estan asignados al arribo
-					checAvailability(arrivalDAO, newArrival, originalArrival, 
+					checkAvailability(arrivalDAO, newArrival, originalArrival, 
 							newContainers, true, algoritmoIN);
 				}
 				newArrival.setContainers(newContainers);
@@ -224,7 +224,7 @@ public class ArrivalServiceImpl implements ArrivalService {
 				}
 
 				if(DATE_CHANGED){				
-					checAvailability(arrivalDAO, newArrival, originalArrival, 
+					checkAvailability(arrivalDAO, newArrival, originalArrival, 
 										originalArrival.getContainers(), false, algoritmoIN);
 				}else{
 					//nada que rompa reglas de negocio cambia
@@ -274,7 +274,7 @@ public class ArrivalServiceImpl implements ArrivalService {
 	 * @return
 	 * @throws CustomServiceException
 	 */
-	private boolean checAvailability(IArrivalDAO arrivalDAO, Arrival newArrival, Arrival origArrival,
+	private boolean checkAvailability(IArrivalDAO arrivalDAO, Arrival newArrival, Arrival origArrival,
 			List<Container> containersToCheck, boolean dontCheckAgainstSameArrivalItem, boolean usar1) throws CustomServiceException{
 		
 		
@@ -325,7 +325,7 @@ public class ArrivalServiceImpl implements ArrivalService {
 	 * @return
 	 * @throws CustomServiceException
 	 */
-	private Duple<Double, List<Container>> getCpacityAndContainers(IContainerDAO containerDAO, List<Long> containerList) throws CustomServiceException{
+	private Duple<Double, List<Container>> getCapacityAndContainers(IContainerDAO containerDAO, List<Long> containerList) throws CustomServiceException{
 		List<Container> containers =new ArrayList<Container>();
 		Duple<Double, List<Container>> ret=  new Duple<>(0.0, containers);
 
@@ -418,7 +418,13 @@ public class ArrivalServiceImpl implements ArrivalService {
 	public void delete(String user, long id) throws CustomServiceException {
 		boolean ok = false;
 		try {
-			ok = arrivalDAO.delete(id);
+			Arrival tmp = arrivalDAO.findById(id);
+			if(!shipDAO.shipInUseInDeparture(tmp.getShip().getId())){
+				ok = arrivalDAO.delete(id);
+			}else{
+				throw new CustomInUseServiceException("No se puede borrar pues está en uso en una partida");	
+			}
+			
 		} catch (Exception e) {
 			log.error("error al dar de baja un Arribo", e);
 			throw new CustomServiceException(e.getMessage(), e);
