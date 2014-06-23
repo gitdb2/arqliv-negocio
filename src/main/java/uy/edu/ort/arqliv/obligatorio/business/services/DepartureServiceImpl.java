@@ -50,11 +50,31 @@ public class DepartureServiceImpl implements DepartureService {
 	
 	private synchronized long internalCreate(Departure departure, Long shipId, List<Long> containerList) throws CustomServiceException { 
 		try {
-//			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
-//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ContainerDao);
-//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ShipDao);
-//			IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
-//			
+			//Pimero controla que el barco exista
+			Ship ship = shipDAO.findById(shipId);
+			if (ship == null) {
+				throw new CustomServiceException("el barco con id= "
+						+ shipId + " no se encuentra en la DB. Se cancela el alta de partida");
+			}
+			
+			//luego que haya arrivado en algún momento, de lo contrario no puede partir
+			List<Arrival> arrivals = arrivalDAO.findArrivalByShipByDateByPort(ship.getId(), departure.getDepartureDate(), departure.getShipDestination());
+			if (arrivals.isEmpty()) {
+				throw new CustomServiceException("No hay arribos previos a la fecha " + sdfOut.format(departure.getDepartureDate()) 
+						+ " para el barco de id " + ship.getId()
+						+ " en el puerto " + departure.getShipDestination() + "."
+						+ " Se cancela el alta de partida");
+			}
+			
+			
+			//si el barco arribó, entonces hayq que controlar:
+			// - Solo se puede crear una partida de un barco que haya arribado y no partido  (para la ultima fecha de arribo)
+			// - si la fecha de arribo == partida controlar que los contenedores sean los mismos.
+			// - si la fecha de partida > arribo los contenedores pueden cambiar
+			// - un contenedor solo puede partir si arribó
+			// - los contenedores que parten solo pueden estar en un sólo barco (una sola partida)
+			
+			
 			List<Container> containers = new ArrayList<Container>();
 
 			for (Long containerId : containerList) {
@@ -75,19 +95,9 @@ public class DepartureServiceImpl implements DepartureService {
 				containers.add(container);
 			}
 			
-			Ship ship = shipDAO.findById(shipId);
-			if (ship == null) {
-				throw new CustomServiceException("el barco con id= "
-						+ shipId + " no se encuentra en la DB. Se cancela el alta de partida");
-			}
 			
-			List<Arrival> arrivals = arrivalDAO.findArrivalByShipByDateByPort(ship.getId(), departure.getDepartureDate(), departure.getShipDestination());
-			if (arrivals.isEmpty()) {
-				throw new CustomServiceException("No hay arribos previos a la fecha " + sdfOut.format(departure.getDepartureDate()) 
-						+ " para el barco de id " + ship.getId()
-						+ " en el puerto " + departure.getShipDestination() + "."
-						+ " Se cancela el alta de partida");
-			}
+			
+		
 			
 			departure.setShip(ship);
 			departure.setContainers(containers);
@@ -108,10 +118,6 @@ public class DepartureServiceImpl implements DepartureService {
 
 	private synchronized long internalUpdate(Departure newDeparture, Long shipId, List<Long> containerList) throws CustomServiceException {
 		try {
-//			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
-//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ContainerDao);
-//			IShipDAO shipDAO = (IShipDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ShipDao);
-//			
 			Ship newShip = shipDAO.findById(shipId);
 			if (newShip == null) {
 				throw new CustomServiceException("El barco con id= " + shipId
@@ -167,7 +173,6 @@ public class DepartureServiceImpl implements DepartureService {
 	}
 	
 	private void checkPreviousArrival(Departure newDeparture) throws CustomServiceException {
-//		IArrivalDAO arrivalDAO = (IArrivalDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ArrivalDao);
 		List<Arrival> previousArrivals = arrivalDAO
 				.findArrivalByShipByDateByPort(newDeparture.getShip().getId(),
 						newDeparture.getDepartureDate(),
@@ -285,7 +290,6 @@ public class DepartureServiceImpl implements DepartureService {
 	public void delete(String user, long id) throws CustomServiceException {
 		boolean ok = false;
 		try {
-//			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.k().getBean(PersistenceConstants.DepartureDao);
 			ok = departureDAO.delete(id);
 		} catch (Exception e) {
 			log.error("Error al dar de baja una Partida", e);
@@ -300,7 +304,6 @@ public class DepartureServiceImpl implements DepartureService {
 	@Override
 	public List<Departure> list(String user) throws CustomServiceException {
 		try {
-//			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
 			List<Departure> ret = new ArrayList<Departure>(departureDAO.findAll());
 			for (Departure departure : ret) {
 				departure.setContainers(new ArrayList<Container>(departure.getContainers()));
@@ -315,7 +318,6 @@ public class DepartureServiceImpl implements DepartureService {
 	@Override
 	public Departure find(String user, long id) throws CustomServiceException {
 		try {
-//			IDepartureDAO departureDAO = (IDepartureDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.DepartureDao);
 			Departure ret = departureDAO.findById(id);
 			if (ret != null) {
 				ret.setContainers(new ArrayList<Container>(ret.getContainers()));
