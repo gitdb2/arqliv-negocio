@@ -12,8 +12,9 @@ import uy.edu.ort.arqliv.obligatorio.common.ReportsService;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomServiceException;
 import uy.edu.ort.arqliv.obligatorio.dominio.Arrival;
 import uy.edu.ort.arqliv.obligatorio.dominio.Container;
-import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
+import uy.edu.ort.arqliv.obligatorio.dominio.Departure;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IArrivalDAO;
+import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IDepartureDAO;
 /**
  * Implementa el servicio de reportes
  * @author mauricio
@@ -24,9 +25,11 @@ public class ReportsServiceImpl implements ReportsService {
 
 	private final Logger log = LoggerFactory.getLogger(ReportsServiceImpl.class);
 	
-	
 	@Autowired
 	IArrivalDAO arrivalDAO;
+	
+	@Autowired
+	IDepartureDAO departureDAO;
 	
 	@Override
 	public List<Arrival> arrivalsByMonth(String user, int month) throws CustomServiceException {
@@ -52,6 +55,34 @@ public class ReportsServiceImpl implements ReportsService {
 			return ret;
 		} catch (Exception e) {
 			log.error("Error al obtener el reporte de Arribos por Mes por Barco", e);
+			throw new CustomServiceException("", e);
+		}
+	}
+
+	@Override
+	public List<Departure> departuresByMonth(String user, int month) throws CustomServiceException {
+		try {
+			List<Departure> ret = departureDAO.departuresByMonth(month);
+			for (Departure departure : ret) {
+				departure.setContainers(new ArrayList<Container>(departure.getContainers()));
+			}
+			return ret;
+		} catch (Exception e) {
+			log.error("Error al obtener el reporte de Partidas por Mes", e);
+			throw new CustomServiceException("", e);
+		}
+	}
+
+	@Override
+	public List<Departure> departuresByMonthByShip(String user, int month, Long shipId) throws CustomServiceException {
+		try {
+			List<Departure> ret = departureDAO.departuresByMonthByShip(month, shipId);
+			for (Departure departure : ret) {
+				departure.setContainers(new ArrayList<Container>(departure.getContainers()));
+			}
+			return ret;
+		} catch (Exception e) {
+			log.error("Error al obtener el reporte de Partidas por Mes por Barco", e);
 			throw new CustomServiceException("", e);
 		}
 	}
