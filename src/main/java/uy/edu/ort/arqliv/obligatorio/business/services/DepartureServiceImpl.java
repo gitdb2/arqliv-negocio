@@ -75,13 +75,13 @@ public class DepartureServiceImpl implements DepartureService {
 						+ arrivalId + " no se encuentra en la DB. Se cancela el alta de partida");
 			}
 			
-			//control del barco
-			shipId = arrival.getShip().getId();
-			Ship ship = shipDAO.findById(shipId);
-			if (ship == null) {
-				throw new CustomServiceException("el barco con id= "
-						+ shipId + " no se encuentra en la DB. Se cancela el alta de partida");
-			}
+//			//control del barco
+//			shipId = arrival.getShip().getId();
+//			Ship ship = shipDAO.findById(shipId);
+//			if (ship == null) {
+//				throw new CustomServiceException("el barco con id= "
+//						+ shipId + " no se encuentra en la DB. Se cancela el alta de partida");
+//			}
 			
 			//control de que ya no este asociado a un departure.
 			boolean isDeparted = departureDAO.isArrivalDeparted(arrivalId);
@@ -110,8 +110,8 @@ public class DepartureServiceImpl implements DepartureService {
 				containersList.add(container);
 			}
 			
-			if(sumContainerCapacity > ship.getCapacity()){
-				throw new CustomServiceException("La capacidad del barco ("+ship.getCapacity()+") no es suficiente para los contenedores seleccionados ("+sumContainerCapacity+")");
+			if(sumContainerCapacity >  arrival.getShip().getCapacity()){
+				throw new CustomServiceException("La capacidad del barco ("+arrival.getShip().getCapacity()+") no es suficiente para los contenedores seleccionados ("+sumContainerCapacity+")");
 			}
 			
 			
@@ -172,7 +172,8 @@ public class DepartureServiceImpl implements DepartureService {
 			
 			
 			departure.setShipTransportedWeightThatDay(sumContainerCapacity);
-			departure.setShip(ship);
+			departure.setShipCapacityThatDay(arrival.getShip().getCapacity());
+			departure.setShip(arrival.getShip());
 			departure.setArrival(arrival);
 			departure.setContainers(containersList);
 			
