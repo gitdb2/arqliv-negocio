@@ -51,7 +51,7 @@ public class DepartureServiceImpl implements DepartureService {
 	
 	@Override
 	public long store(String user, Departure departure, Long shipId, List<Long> containerList, Long arrivalId) throws CustomServiceException {
-		return internalCreate(departure, shipId, containerList, arrivalId);
+		return internalCreateUpdate(departure, shipId, containerList, arrivalId, false);
 	}
 	
 	/**
@@ -63,11 +63,10 @@ public class DepartureServiceImpl implements DepartureService {
 	 * @return
 	 * @throws CustomServiceException
 	 */
-	private synchronized long internalCreate(Departure departure, Long shipId, List<Long> containersIdList, Long arrivalId) throws CustomServiceException { 
+	private synchronized long internalCreateUpdate(Departure departure, 
+			Long shipId, List<Long> containersIdList, 
+			Long arrivalId, boolean isUpdate) throws CustomServiceException {
 		try {
-			//Pimero controla que el barco exista
-	
-			
 			//control existencia de arrival
 			Arrival arrival = arrivalDAO.findById(arrivalId);
 			if (arrival == null) {
@@ -84,12 +83,17 @@ public class DepartureServiceImpl implements DepartureService {
 //			}
 			
 			//control de que ya no este asociado a un departure.
-			boolean isDeparted = departureDAO.isArrivalDeparted(arrivalId);
+			boolean isDeparted;
+			if (isUpdate) {
+				isDeparted = departureDAO.isArrivalDepartedDifferentDeparture(arrivalId, departure.getId());
+			} else {
+				isDeparted = departureDAO.isArrivalDeparted(arrivalId);
+			}
+			 
 			if (isDeparted) {
 				throw new CustomServiceException("el Arribo con id= "
 						+ arrivalId + " ya tiene asignada una partida. Se cancela el alta de partida");
 			}
-			
 			
 			//se limpia la lista de contenedores por si hay repetidos
 			Set<Long> containerDepartureSet = new HashSet<>(containersIdList);
@@ -114,7 +118,6 @@ public class DepartureServiceImpl implements DepartureService {
 				throw new CustomServiceException("La capacidad del barco ("+arrival.getShip().getCapacity()+") no es suficiente para los contenedores seleccionados ("+sumContainerCapacity+")");
 			}
 			
-			
 			//control de fecha
 			int comparation  = compareDate(arrival.getArrivalDate(), departure.getDepartureDate());
 			boolean mismoDia = comparation==0;
@@ -135,15 +138,11 @@ public class DepartureServiceImpl implements DepartureService {
 				}
 			}
 			
-			
 			//chequeo de contenedores seleccionados para que no haya otra partida ese dia que los use.
-			List<Departure> departuresUsignContainers = departureDAO
-											.findDepartureUsingContainerListForDate(
-													containersList, departure.getDepartureDate());
+			List<Departure> departuresUsignContainers = departureDAO.findDepartureUsingContainerListForDate(containersList, departure.getDepartureDate());
 			if(departuresUsignContainers.size()> 0){
 				throw new CustomServiceException("alguno de los contenedores ya estan en uso en otras partidas para ese dia");
 			}
-			
 				
 			for (Container container : containersList) {
 				//control de que el contenedor haya arrivado y no partido en una fecha menor o igual
@@ -153,23 +152,12 @@ public class DepartureServiceImpl implements DepartureService {
 				}
 			}
 			
-	
-			
 			//si el barco arribó, entonces hayq que controlar:
 			// - Solo se puede crear una partida de un barco que haya arribado y no partido  (para la ultima fecha de arribo)
 			// - si la fecha de arribo == partida controlar que los contenedores sean los mismos.
 			// - si la fecha de partida > arribo los contenedores pueden cambiar
 			// - un contenedor solo puede partir si arribó
 			// - los contenedores que parten solo pueden estar en un sólo barco (una sola partida)
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 			departure.setShipTransportedWeightThatDay(sumContainerCapacity);
 			departure.setShipCapacityThatDay(arrival.getShip().getCapacity());
@@ -189,7 +177,8 @@ public class DepartureServiceImpl implements DepartureService {
 
 	@Override
 	public long update(String user, Departure newDeparture, Long shipId, List<Long> containerList, Long arrivalId) throws CustomServiceException {
-		return internalUpdate(newDeparture, shipId, containerList, arrivalId);
+		return internalCreateUpdate(newDeparture, shipId, containerList, arrivalId, true);//
+		//return internalUpdate(newDeparture, shipId, containerList, arrivalId);
 	}
 	
 	/**
