@@ -1,7 +1,9 @@
 package uy.edu.ort.arqliv.obligatorio.business.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -69,13 +71,13 @@ public class DepartureServiceImpl implements DepartureService {
 						+ arrivalId + " no se encuentra en la DB. Se cancela el alta de partida");
 			}
 			
-			//control del barco
-			shipId = arrival.getShip().getId();
-			Ship ship = shipDAO.findById(shipId);
-			if (ship == null) {
-				throw new CustomServiceException("el barco con id= "
-						+ shipId + " no se encuentra en la DB. Se cancela el alta de partida");
-			}
+//			//control del barco
+//			shipId = arrival.getShip().getId();
+//			Ship ship = shipDAO.findById(shipId);
+//			if (ship == null) {
+//				throw new CustomServiceException("el barco con id= "
+//						+ shipId + " no se encuentra en la DB. Se cancela el alta de partida");
+//			}
 			
 			//control de que ya no este asociado a un departure.
 			boolean isDeparted;
@@ -109,8 +111,8 @@ public class DepartureServiceImpl implements DepartureService {
 				containersList.add(container);
 			}
 			
-			if(sumContainerCapacity > ship.getCapacity()){
-				throw new CustomServiceException("La capacidad del barco ("+ship.getCapacity()+") no es suficiente para los contenedores seleccionados ("+sumContainerCapacity+")");
+			if(sumContainerCapacity >  arrival.getShip().getCapacity()){
+				throw new CustomServiceException("La capacidad del barco ("+arrival.getShip().getCapacity()+") no es suficiente para los contenedores seleccionados ("+sumContainerCapacity+")");
 			}
 			
 			//control de fecha
@@ -172,7 +174,8 @@ public class DepartureServiceImpl implements DepartureService {
 			// - los contenedores que parten solo pueden estar en un sólo barco (una sola partida)
 			
 			departure.setShipTransportedWeightThatDay(sumContainerCapacity);
-			departure.setShip(ship);
+			departure.setShipCapacityThatDay(arrival.getShip().getCapacity());
+			departure.setShip(arrival.getShip());
 			departure.setArrival(arrival);
 			departure.setContainers(containersList);
 			
@@ -200,22 +203,26 @@ public class DepartureServiceImpl implements DepartureService {
 	 */
 	@SuppressWarnings("deprecation")
 	private int compareDate(Date date1, Date date2) {
-	    if (date1.getYear() == date2.getYear() &&
-	        date1.getMonth() == date2.getMonth() &&
-	        date1.getDate() == date2.getDate()) {
-	      return 0 ;
-	    } 
-	    else if (date1.getYear() < date1.getYear() ||
-	             (date1.getYear() == date2.getYear() &&
-	              date1.getMonth() < date2.getMonth()) ||
-	             (date1.getYear() == date2.getYear() &&
-	              date1.getMonth() == date2.getMonth() &&
-	              date1.getDate() < date2.getDate())) {
-	      return -1 ;
-	   }
-	   else {
-	     return 1 ;
-	   }
+		
+		
+		
+	   Calendar cal1 = GregorianCalendar.getInstance();
+	   cal1.setTime(date1);
+	   cal1.set(Calendar.SECOND, 0);
+	   cal1.set(Calendar.MINUTE, 0);
+	   cal1.set(Calendar.HOUR, 0);
+	   
+	   Calendar cal2 = GregorianCalendar.getInstance();
+	   cal2.setTime(date2);
+	   cal2.set(Calendar.SECOND, 0);
+	   cal2.set(Calendar.MINUTE, 0);
+	   cal2.set(Calendar.HOUR, 0);
+	   
+	   log.info("cal1="+ cal1.toString());
+	   log.info("cal2="+ cal2.toString());
+	   return cal1.compareTo(cal2);
+	   
+	   
 	}
 	
 	@Override
