@@ -116,9 +116,9 @@ public class DepartureServiceImpl implements DepartureService {
 			
 			
 			//control de fecha
-			int comparation = compareDate(arrival.getArrivalDate(), departure.getDepartureDate());
+			int comparation  = compareDate(arrival.getArrivalDate(), departure.getDepartureDate());
 			boolean mismoDia = comparation==0;
-			boolean fechaOk = mismoDia || comparation >0;
+			boolean fechaOk  = comparation <=0;
 			
 			if(!fechaOk){
 				throw new CustomServiceException("La fecha de partida no puede ser menor a la de arribo");
