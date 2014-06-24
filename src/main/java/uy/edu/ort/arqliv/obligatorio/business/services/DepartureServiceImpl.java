@@ -33,15 +33,18 @@ public class DepartureServiceImpl implements DepartureService {
 	private final Logger log = LoggerFactory.getLogger(DepartureServiceImpl.class);
 	
 	private SimpleDateFormat sdfOut = new SimpleDateFormat("dd/MM/yyyy");
+	
 	@Autowired
 	IDepartureDAO departureDAO ;
+	
 	@Autowired
 	IContainerDAO containerDAO ;
+	
 	@Autowired
 	IShipDAO shipDAO ;
+
 	@Autowired
 	IArrivalDAO arrivalDAO;
-	
 	
 	@Override
 	public long store(String user, Departure departure, Long shipId, List<Long> containerList) throws CustomServiceException {
@@ -66,7 +69,6 @@ public class DepartureServiceImpl implements DepartureService {
 						+ " Se cancela el alta de partida");
 			}
 			
-			
 			//si el barco arribó, entonces hayq que controlar:
 			// - Solo se puede crear una partida de un barco que haya arribado y no partido  (para la ultima fecha de arribo)
 			// - si la fecha de arribo == partida controlar que los contenedores sean los mismos.
@@ -74,9 +76,10 @@ public class DepartureServiceImpl implements DepartureService {
 			// - un contenedor solo puede partir si arribó
 			// - los contenedores que parten solo pueden estar en un sólo barco (una sola partida)
 			
-			
 			List<Container> containers = new ArrayList<Container>();
 
+			double sumContainerCapacity = 0.0;
+			
 			for (Long containerId : containerList) {
 				Container container = containerDAO.findById(containerId);
 
@@ -92,13 +95,10 @@ public class DepartureServiceImpl implements DepartureService {
 							+ " Se cancela el alta de partida");
 				}
 
+				sumContainerCapacity += container.getCapacity();
 				containers.add(container);
 			}
-			
-			
-			
-		
-			
+			departure.setShipTransportedWeightThatDay(sumContainerCapacity);
 			departure.setShip(ship);
 			departure.setContainers(containers);
 			return departureDAO.store(departure);
@@ -154,6 +154,7 @@ public class DepartureServiceImpl implements DepartureService {
 					checkAvailability(departureDAO, newDeparture, originalDeparture, newContainers, true);
 				}
 				newDeparture.setContainers(newContainers);
+				newDeparture.setShipTransportedWeightThatDay(sumCapacities(newContainers));
 			}
 			
 			if (DATE_CHANGED) {
@@ -170,6 +171,19 @@ public class DepartureServiceImpl implements DepartureService {
 			log.error("Error en modificacion de Partida", e);
 			throw new CustomServiceException(e.getMessage(), e);
 		}
+	}
+	
+	/**
+	 * Suma las capacidades de los contenedores, se usa en caso que cambie el barco y su capacidad
+	 * @param containerList
+	 * @return
+	 */
+	private Double sumCapacities(List<Container> containerList){
+		double ret = 0.0;
+		for (Container container : containerList) {
+			ret += container.getCapacity();
+		}
+		return ret;
 	}
 	
 	private void checkPreviousArrival(Departure newDeparture) throws CustomServiceException {

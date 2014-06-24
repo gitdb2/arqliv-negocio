@@ -19,7 +19,6 @@ import uy.edu.ort.arqliv.obligatorio.common.utils.Duple;
 import uy.edu.ort.arqliv.obligatorio.dominio.Arrival;
 import uy.edu.ort.arqliv.obligatorio.dominio.Container;
 import uy.edu.ort.arqliv.obligatorio.dominio.Ship;
-import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IArrivalDAO;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IContainerDAO;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IShipDAO;
