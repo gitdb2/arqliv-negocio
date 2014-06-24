@@ -19,7 +19,6 @@ import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomServiceException;
 import uy.edu.ort.arqliv.obligatorio.dominio.Arrival;
 import uy.edu.ort.arqliv.obligatorio.dominio.Container;
 import uy.edu.ort.arqliv.obligatorio.dominio.Departure;
-import uy.edu.ort.arqliv.obligatorio.dominio.Ship;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IArrivalDAO;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IContainerDAO;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IDepartureDAO;
@@ -201,11 +200,7 @@ public class DepartureServiceImpl implements DepartureService {
 	 * @param date2
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	private int compareDate(Date date1, Date date2) {
-		
-		
-		
 	   Calendar cal1 = GregorianCalendar.getInstance();
 	   cal1.setTime(date1);
 	   cal1.set(Calendar.SECOND, 0);
@@ -221,8 +216,6 @@ public class DepartureServiceImpl implements DepartureService {
 	   log.info("cal1="+ cal1.toString());
 	   log.info("cal2="+ cal2.toString());
 	   return cal1.compareTo(cal2);
-	   
-	   
 	}
 	
 	@Override
