@@ -2,7 +2,10 @@ package uy.edu.ort.arqliv.obligatorio.business.services;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
@@ -55,19 +58,15 @@ public class DepartureServiceImpl implements DepartureService {
 	 * asocia un departure con barco contenedores y arrival, y realiza los controles necesarios
 	 * @param departure
 	 * @param shipId
-	 * @param containerList
+	 * @param containersIdList
 	 * @param arrivalId
 	 * @return
 	 * @throws CustomServiceException
 	 */
-	private synchronized long internalCreate(Departure departure, Long shipId, List<Long> containerList, Long arrivalId) throws CustomServiceException { 
+	private synchronized long internalCreate(Departure departure, Long shipId, List<Long> containersIdList, Long arrivalId) throws CustomServiceException { 
 		try {
 			//Pimero controla que el barco exista
-			Ship ship = shipDAO.findById(shipId);
-			if (ship == null) {
-				throw new CustomServiceException("el barco con id= "
-						+ shipId + " no se encuentra en la DB. Se cancela el alta de partida");
-			}
+	
 			
 			//control existencia de arrival
 			Arrival arrival = arrivalDAO.findById(arrivalId);
@@ -76,14 +75,30 @@ public class DepartureServiceImpl implements DepartureService {
 						+ arrivalId + " no se encuentra en la DB. Se cancela el alta de partida");
 			}
 			
+			//control del barco
+			shipId = arrival.getShip().getId();
+			Ship ship = shipDAO.findById(shipId);
+			if (ship == null) {
+				throw new CustomServiceException("el barco con id= "
+						+ shipId + " no se encuentra en la DB. Se cancela el alta de partida");
+			}
+			
 			//control de que ya no este asociado a un departure.
 			boolean isDeparted = departureDAO.isArrivalDeparted(arrivalId);
+			if (isDeparted) {
+				throw new CustomServiceException("el Arribo con id= "
+						+ arrivalId + " ya tiene asignada una partida. Se cancela el alta de partida");
+			}
 			
+			
+			//se limpia la lista de contenedores por si hay repetidos
+			Set<Long> containerDepartureSet = new HashSet<>(containersIdList);
+			containersIdList = new ArrayList<>(containerDepartureSet);
 			
 			//control que los contenendores existan.			
-			List<Container> containers = new ArrayList<Container>();
+			List<Container> containersList = new ArrayList<Container>();
 			double sumContainerCapacity = 0.0;
-			for (Long containerId : containerList) {
+			for (Long containerId : containersIdList) {
 				Container container = containerDAO.findById(containerId);
 
 				if (container == null) {
@@ -91,41 +106,54 @@ public class DepartureServiceImpl implements DepartureService {
 							+ containerId + " no se encuentra en la DB. Se cancela el alta de partida");
 				}
 
-//				if (containerDAO.isContainerInUseForArrival(containerId, departure.getDepartureDate())) {
-//					throw new CustomServiceException("el contenedor con id= "
-//							+ containerId
-//							+ " ya partió para la fecha ("+ sdfOut.format(departure.getDepartureDate()) + ")."
-//							+ " Se cancela el alta de partida");
-//				}
-
 				sumContainerCapacity += container.getCapacity();
-				containers.add(container);
+				containersList.add(container);
+			}
+			
+			if(sumContainerCapacity > ship.getCapacity()){
+				throw new CustomServiceException("La capacidad del barco ("+ship.getCapacity()+") no es suficiente para los contenedores seleccionados ("+sumContainerCapacity+")");
 			}
 			
 			
+			//control de fecha
+			int comparation = compareDate(arrival.getArrivalDate(), departure.getDepartureDate());
+			boolean mismoDia = comparation==0;
+			boolean fechaOk = mismoDia || comparation >0;
+			
+			if(!fechaOk){
+				throw new CustomServiceException("La fecha de partida no puede ser menor a la de arribo");
+			}
+
+			//si es el mismo dia se controla que los contenedores sean los mismos con los que arribo
+			if(mismoDia){
+				Set<Long> containerArrivedSet = new HashSet<>(arrival.getContainersIdList());
+				
+				boolean containerChanged =  !(containerArrivedSet.size() == containerDepartureSet.size()
+									  && containerArrivedSet.containsAll(containerDepartureSet));
+				if(containerChanged){
+					throw new CustomServiceException("Los contenedores de partida deben ser mismos que los que arrivaron (fecha arribo =  fecha partida)");
+				}
+			}
 			
 			
+			//chequeo de contenedores seleccionados para que no haya otra partida ese dia que los use.
+			List<Departure> departuresUsignContainers = departureDAO
+											.findDepartureUsingContainerListForDate(
+													containersList, departure.getDepartureDate());
+			if(departuresUsignContainers.size()> 0){
+				throw new CustomServiceException("alguno de los contenedores ya estan en uso en otras partidas para ese dia");
+			}
 			
+				
+			for (Container container : containersList) {
+				//control de que el contenedor haya arrivado y no partido en una fecha menor o igual
+				if (!departureDAO.isContainerAvailableForDeparture(container.getId(), departure.getDepartureDate())) {
+					throw new CustomServiceException("Al contenedor con id= "+ container.getId()
+						+ " no se le puede encontrar un arribo anterir que no haya partido");
+				}
+			}
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-//			//luego que haya arrivado en algún momento, de lo contrario no puede partir
-//			List<Arrival> arrivals = arrivalDAO.findArrivalByShipByDateByPort(ship.getId(), departure.getDepartureDate(), departure.getShipDestination());
-//			if (arrivals.isEmpty()) {
-//				throw new CustomServiceException("No hay arribos previos a la fecha " + sdfOut.format(departure.getDepartureDate()) 
-//						+ " para el barco de id " + ship.getId()
-//						+ " en el puerto " + departure.getShipDestination() + "."
-//						+ " Se cancela el alta de partida");
-//			}
+	
 			
 			//si el barco arribó, entonces hayq que controlar:
 			// - Solo se puede crear una partida de un barco que haya arribado y no partido  (para la ultima fecha de arribo)
@@ -145,7 +173,9 @@ public class DepartureServiceImpl implements DepartureService {
 			
 			departure.setShipTransportedWeightThatDay(sumContainerCapacity);
 			departure.setShip(ship);
-			departure.setContainers(containers);
+			departure.setArrival(arrival);
+			departure.setContainers(containersList);
+			
 			return departureDAO.store(departure);
 		} catch (CustomServiceException e) {
 			log.error("error en alta de la Partida", e);
@@ -160,6 +190,33 @@ public class DepartureServiceImpl implements DepartureService {
 	public long update(String user, Departure newDeparture, Long shipId, List<Long> containerList, Long arrivalId) throws CustomServiceException {
 		return internalUpdate(newDeparture, shipId, containerList, arrivalId);
 	}
+	
+	/**
+	 * Compara fechas sin tener en cuenta hora
+	 * @param date1
+	 * @param date2
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	private int compareDate(Date date1, Date date2) {
+	    if (date1.getYear() == date2.getYear() &&
+	        date1.getMonth() == date2.getMonth() &&
+	        date1.getDate() == date2.getDate()) {
+	      return 0 ;
+	    } 
+	    else if (date1.getYear() < date1.getYear() ||
+	             (date1.getYear() == date2.getYear() &&
+	              date1.getMonth() < date2.getMonth()) ||
+	             (date1.getYear() == date2.getYear() &&
+	              date1.getMonth() == date2.getMonth() &&
+	              date1.getDate() < date2.getDate())) {
+	      return -1 ;
+	   }
+	   else {
+	     return 1 ;
+	   }
+	}
+	
 
 	private synchronized long internalUpdate(Departure newDeparture, Long shipId, List<Long> containerList, Long arrivalId) throws CustomServiceException {
 		try {
