@@ -11,7 +11,6 @@ import uy.edu.ort.arqliv.obligatorio.common.ContainerService;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomInUseServiceException;
 import uy.edu.ort.arqliv.obligatorio.common.exceptions.CustomServiceException;
 import uy.edu.ort.arqliv.obligatorio.dominio.Container;
-import uy.edu.ort.arqliv.obligatorio.persistencia.constants.PersistenceConstants;
 import uy.edu.ort.arqliv.obligatorio.persistencia.dao.IContainerDAO;
 /**
  * Implementacion del servicio para contenedores
@@ -31,8 +30,6 @@ public class ContainerServiceImpl implements ContainerService {
 		log.info("llego el login: "+user);
 		log.info("llego el container: "+ container);
 		try {
-//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
-//					PersistenceConstants.ContainerDao);
 
 			return containerDAO.store(container);
 		} catch (Exception e) {
@@ -45,7 +42,6 @@ public class ContainerServiceImpl implements ContainerService {
 	public void delete(String user, long id) throws CustomServiceException {
 		boolean ok =false;
 		try {
-//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(PersistenceConstants.ContainerDao);
 			ok =  containerDAO.delete(id);
 		} catch (Exception e) {
 			log.error("error al dar de baja un contenedor",e);
@@ -61,9 +57,7 @@ public class ContainerServiceImpl implements ContainerService {
 	@Override
 	public List<Container> list(String user) throws CustomServiceException {
 		try {
-//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
-//					PersistenceConstants.ContainerDao);
-			
+		
 			return containerDAO.findAll();
 		} catch (Exception e) {
 			log.error("error al listar los contenedores",e);
@@ -78,8 +72,6 @@ public class ContainerServiceImpl implements ContainerService {
 		log.info("llego el container: "+ container);
 		
 		try {
-//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
-//					PersistenceConstants.ContainerDao);
 			Long ret = containerDAO.update(container);
 			if(ret == null){
 				throw new CustomServiceException("no se permite modificar la capacidad de un contenedor en uso");
@@ -97,8 +89,6 @@ public class ContainerServiceImpl implements ContainerService {
 	@Override
 	public Container find(String user, long id) throws CustomServiceException {
 		try {
-//			IContainerDAO containerDAO = (IContainerDAO) ContextSingleton.getInstance().getBean(
-//					PersistenceConstants.ContainerDao);
 
 			return containerDAO.findById(id);
 		} catch (Exception e) {

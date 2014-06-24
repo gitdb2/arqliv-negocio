@@ -47,11 +47,20 @@ public class DepartureServiceImpl implements DepartureService {
 	IArrivalDAO arrivalDAO;
 	
 	@Override
-	public long store(String user, Departure departure, Long shipId, List<Long> containerList) throws CustomServiceException {
-		return internalCreate(departure, shipId, containerList);
+	public long store(String user, Departure departure, Long shipId, List<Long> containerList, Long arrivalId) throws CustomServiceException {
+		return internalCreate(departure, shipId, containerList, arrivalId);
 	}
 	
-	private synchronized long internalCreate(Departure departure, Long shipId, List<Long> containerList) throws CustomServiceException { 
+	/**
+	 * asocia un departure con barco contenedores y arrival, y realiza los controles necesarios
+	 * @param departure
+	 * @param shipId
+	 * @param containerList
+	 * @param arrivalId
+	 * @return
+	 * @throws CustomServiceException
+	 */
+	private synchronized long internalCreate(Departure departure, Long shipId, List<Long> containerList, Long arrivalId) throws CustomServiceException { 
 		try {
 			//Pimero controla que el barco exista
 			Ship ship = shipDAO.findById(shipId);
@@ -112,11 +121,11 @@ public class DepartureServiceImpl implements DepartureService {
 	}
 
 	@Override
-	public long update(String user, Departure newDeparture, Long shipId, List<Long> containerList) throws CustomServiceException {
-		return internalUpdate(newDeparture, shipId, containerList);
+	public long update(String user, Departure newDeparture, Long shipId, List<Long> containerList, Long arrivalId) throws CustomServiceException {
+		return internalUpdate(newDeparture, shipId, containerList, arrivalId);
 	}
 
-	private synchronized long internalUpdate(Departure newDeparture, Long shipId, List<Long> containerList) throws CustomServiceException {
+	private synchronized long internalUpdate(Departure newDeparture, Long shipId, List<Long> containerList, Long arrivalId) throws CustomServiceException {
 		try {
 			Ship newShip = shipDAO.findById(shipId);
 			if (newShip == null) {
