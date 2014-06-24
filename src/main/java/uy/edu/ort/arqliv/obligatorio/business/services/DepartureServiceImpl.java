@@ -69,26 +69,20 @@ public class DepartureServiceImpl implements DepartureService {
 						+ shipId + " no se encuentra en la DB. Se cancela el alta de partida");
 			}
 			
-			//luego que haya arrivado en algún momento, de lo contrario no puede partir
-			List<Arrival> arrivals = arrivalDAO.findArrivalByShipByDateByPort(ship.getId(), departure.getDepartureDate(), departure.getShipDestination());
-			if (arrivals.isEmpty()) {
-				throw new CustomServiceException("No hay arribos previos a la fecha " + sdfOut.format(departure.getDepartureDate()) 
-						+ " para el barco de id " + ship.getId()
-						+ " en el puerto " + departure.getShipDestination() + "."
-						+ " Se cancela el alta de partida");
+			//control existencia de arrival
+			Arrival arrival = arrivalDAO.findById(arrivalId);
+			if (arrival == null) {
+				throw new CustomServiceException("el Arribo con id= "
+						+ arrivalId + " no se encuentra en la DB. Se cancela el alta de partida");
 			}
 			
-			//si el barco arribó, entonces hayq que controlar:
-			// - Solo se puede crear una partida de un barco que haya arribado y no partido  (para la ultima fecha de arribo)
-			// - si la fecha de arribo == partida controlar que los contenedores sean los mismos.
-			// - si la fecha de partida > arribo los contenedores pueden cambiar
-			// - un contenedor solo puede partir si arribó
-			// - los contenedores que parten solo pueden estar en un sólo barco (una sola partida)
+			//control de que ya no este asociado a un departure.
+			boolean isDeparted = departureDAO.isArrivalDeparted(arrivalId);
 			
+			
+			//control que los contenendores existan.			
 			List<Container> containers = new ArrayList<Container>();
-
 			double sumContainerCapacity = 0.0;
-			
 			for (Long containerId : containerList) {
 				Container container = containerDAO.findById(containerId);
 
@@ -97,16 +91,58 @@ public class DepartureServiceImpl implements DepartureService {
 							+ containerId + " no se encuentra en la DB. Se cancela el alta de partida");
 				}
 
-				if (containerDAO.isContainerInUseForArrival(containerId, departure.getDepartureDate())) {
-					throw new CustomServiceException("el contenedor con id= "
-							+ containerId
-							+ " ya partió para la fecha ("+ sdfOut.format(departure.getDepartureDate()) + ")."
-							+ " Se cancela el alta de partida");
-				}
+//				if (containerDAO.isContainerInUseForArrival(containerId, departure.getDepartureDate())) {
+//					throw new CustomServiceException("el contenedor con id= "
+//							+ containerId
+//							+ " ya partió para la fecha ("+ sdfOut.format(departure.getDepartureDate()) + ")."
+//							+ " Se cancela el alta de partida");
+//				}
 
 				sumContainerCapacity += container.getCapacity();
 				containers.add(container);
 			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+//			//luego que haya arrivado en algún momento, de lo contrario no puede partir
+//			List<Arrival> arrivals = arrivalDAO.findArrivalByShipByDateByPort(ship.getId(), departure.getDepartureDate(), departure.getShipDestination());
+//			if (arrivals.isEmpty()) {
+//				throw new CustomServiceException("No hay arribos previos a la fecha " + sdfOut.format(departure.getDepartureDate()) 
+//						+ " para el barco de id " + ship.getId()
+//						+ " en el puerto " + departure.getShipDestination() + "."
+//						+ " Se cancela el alta de partida");
+//			}
+			
+			//si el barco arribó, entonces hayq que controlar:
+			// - Solo se puede crear una partida de un barco que haya arribado y no partido  (para la ultima fecha de arribo)
+			// - si la fecha de arribo == partida controlar que los contenedores sean los mismos.
+			// - si la fecha de partida > arribo los contenedores pueden cambiar
+			// - un contenedor solo puede partir si arribó
+			// - los contenedores que parten solo pueden estar en un sólo barco (una sola partida)
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			departure.setShipTransportedWeightThatDay(sumContainerCapacity);
 			departure.setShip(ship);
 			departure.setContainers(containers);
